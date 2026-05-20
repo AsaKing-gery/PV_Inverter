@@ -26,6 +26,14 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "adc_convert.h"
+#include "mppt.h"
+#include "spwm.h"
+#include "pll_sogi.h"
+#include "protection.h"
+#include "data.h"
+#include <string.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -253,15 +261,141 @@ void InitTask(void *argument)
   * @brief  控制任务 - 最高优先级
   * @param  argument: 任务参数
   * @retval None
+  * @note   10ms周期，执行以下功能：
+  *         1. 读取ADC数据
+  *         2. 还原物理量
+  *         3. MPPT算法
+  *         4. SPWM更新 (在TIM8中断中执行)
+  *         5. 锁相环SOGI-PLL
+  *         6. 保护检测
+  *         7. 更新全局数据
   */
 void ControlTask(void *argument)
 {
   /* USER CODE BEGIN ControlTask */
+  
+  /* 初始化各模块 */
+  ADC_DMA_Start();           /* 启动ADC DMA采集 */
+  MPPT_Init();               /* 初始化MPPT */
+  SPWM_Init();               /* 初始化SPWM */
+  PLL_Init();                /* 初始化锁相环 */
+  Protection_Init();         /* 初始化保护系统 */
+  
+  /* 启动SPWM输出 */
+  SPWM_Start();
+  
+  /* 任务周期计数 */
+  uint32_t cycleCount = 0;
+  
   for (;;)
   {
-    /* 控制算法实现 */
+    /* ========== 1. 读取ADC原始数据 ========== */
+    uint16_t rawPV_V = ADC_GetRawValue(ADC_IDX_PV_VOLTAGE);
+    uint16_t rawPV_I = ADC_GetRawValue(ADC_IDX_PV_CURRENT);
+    uint16_t rawBUS_V = ADC_GetRawValue(ADC_IDX_BUS_VOLTAGE);
+    uint16_t rawAC_I = ADC_GetRawValue(ADC_IDX_AC_CURRENT);
+    uint16_t rawAC_V = ADC_GetRawValue(ADC_IDX_AC_VOLTAGE);
+    uint16_t rawTEMP_F = ADC_GetRawValue(ADC_IDX_TEMP_FRONT);
+    uint16_t rawTEMP_R = ADC_GetRawValue(ADC_IDX_TEMP_REAR);
     
-    osDelay(1);
+    /* ========== 2. 还原物理量 ========== */
+    float pvVoltage = ADC_ConvertPVVoltage(rawPV_V);
+    float pvCurrent = ADC_ConvertPVCurrent(rawPV_I);
+    float busVoltage = ADC_ConvertBusVoltage(rawBUS_V);
+    float acCurrent = ADC_ConvertACCurrent(rawAC_I);
+    float acVoltage = ADC_ConvertACVoltage(rawAC_V);
+    float tempFront = ADC_ConvertTemperature(rawTEMP_F);
+    float tempRear = ADC_ConvertTemperature(rawTEMP_R);
+    
+    /* 计算功率 */
+    float pvPower = pvVoltage * pvCurrent;
+    float acPower = acVoltage * acCurrent;
+    
+    /* ========== 3. MPPT算法 (每100ms执行一次) ========== */
+    if (cycleCount % 10 == 0)  /* 10ms * 10 = 100ms */
+    {
+      /* 获取降功率系数 */
+      float derateFactor = Protection_GetDerateFactor();
+      
+      /* 执行MPPT */
+      MPPT_Execute(pvVoltage, pvCurrent);
+      
+      /* 应用降功率限制 */
+      uint8_t targetDuty = (uint8_t)(MPPT_GetDuty() * derateFactor);
+      MPPT_SetDuty(targetDuty);
+    }
+    
+    /* ========== 4. SPWM更新 ========== */
+    /* SPWM在TIM8中断中自动更新 (50µs周期) */
+    /* 这里只更新调制比 */
+    if (cycleCount % 10 == 0)
+    {
+      float derateFactor = Protection_GetDerateFactor();
+      uint8_t modulation = (uint8_t)(80 * derateFactor);  /* 基础调制比80% */
+      
+      if (modulation < 10) modulation = 10;  /* 最小10% */
+      SPWM_SetModulation(modulation);
+    }
+    
+    /* ========== 5. 锁相环SOGI-PLL ========== */
+    PLL_Update(acVoltage);
+    
+    /* ========== 6. 保护检测 ========== */
+    uint8_t faultCode = Protection_Check(pvVoltage, acCurrent, tempFront, tempRear);
+    
+    if (faultCode != 0)
+    {
+      /* 有故障，执行保护动作 */
+      Protection_ExecuteAction();
+    }
+    
+    /* ========== 7. 更新全局数据 (加互斥锁) ========== */
+    osMutexAcquire(globalDataMutex, osWaitForever);
+    {
+      /* 光伏数据 */
+      g_mqttData.pv.voltage = pvVoltage;
+      g_mqttData.pv.current = pvCurrent;
+      g_mqttData.pv.power = pvPower;
+      
+      /* 母线数据 */
+      g_mqttData.bus.voltage = busVoltage;
+      
+      /* 交流输出数据 */
+      g_mqttData.ac.voltage = acVoltage;
+      g_mqttData.ac.current = acCurrent;
+      g_mqttData.ac.power = acPower;
+      g_mqttData.ac.freq = PLL_GetFrequency();
+      
+      /* 温度数据 */
+      g_mqttData.temp.front = tempFront;
+      g_mqttData.temp.rear = tempRear;
+      
+      /* MPPT数据 */
+      g_mqttData.mppt.duty = MPPT_GetDuty();
+      g_mqttData.mppt.efficiency = MPPT_GetEfficiency();
+      
+      /* 逆变器状态 */
+      if (PLL_IsLocked())
+      {
+        strncpy(g_mqttData.inverter.syncState, "SYNCED", sizeof(g_mqttData.inverter.syncState));
+      }
+      else
+      {
+        strncpy(g_mqttData.inverter.syncState, "UNSYNC", sizeof(g_mqttData.inverter.syncState));
+      }
+      
+      /* 保护状态已在Protection模块中更新 */
+    }
+    osMutexRelease(globalDataMutex);
+    
+    /* 释放ADC完成信号量 (通知其他任务) */
+    osSemaphoreRelease(adcDoneSem);
+    
+    /* 周期计数 */
+    cycleCount++;
+    
+    /* 10ms周期 */
+    osDelay(10);
   }
   /* USER CODE END ControlTask */
 }
