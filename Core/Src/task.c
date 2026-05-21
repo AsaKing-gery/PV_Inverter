@@ -357,42 +357,32 @@ void ControlTask(void *argument)
       Protection_ExecuteAction();
     }
     
-    /* ========== 7. 更新全局数据 (加互斥锁) ========== */
+    /* ========== 7. 准备状态字符串 (互斥量外准备) ========== */
+    const char* invState = PLL_IsLocked() ? "RUN" : "STOP";
+    
+    /* ========== 8. 更新全局数据 (缩短互斥量持有时间) ========== */
     osMutexAcquire(globalDataMutex, osWaitForever);
     {
-      /* 光伏数据 */
+      /* 使用结构体赋值减少代码量 */
       g_mqttData.pv.voltage = pvVoltage;
       g_mqttData.pv.current = pvCurrent;
       g_mqttData.pv.power = pvPower;
       
-      /* 母线数据 */
       g_mqttData.bus.voltage = busVoltage;
       
-      /* 交流输出数据 */
       g_mqttData.ac.voltage = acVoltage;
       g_mqttData.ac.current = acCurrent;
       g_mqttData.ac.power = acPower;
       g_mqttData.ac.frequency = PLL_GetFrequency();
       
-      /* 温度数据 (使用mosfet_front/mosfet_rear字段) */
       g_mqttData.temp.mosfet_front = tempFront;
       g_mqttData.temp.mosfet_rear = tempRear;
       
-      /* MPPT数据 */
       g_mqttData.mppt.duty = MPPT_GetDuty();
       g_mqttData.mppt.efficiency = MPPT_GetEfficiency();
       
-      /* 逆变器状态 (使用state字段，非syncState) */
-      if (PLL_IsLocked())
-      {
-        strncpy(g_mqttData.inverter.state, "RUN", sizeof(g_mqttData.inverter.state));
-      }
-      else
-      {
-        strncpy(g_mqttData.inverter.state, "STOP", sizeof(g_mqttData.inverter.state));
-      }
-      
-      /* 保护状态已在Protection模块中更新 */
+      /* 直接赋值4字节状态码，比strncpy更快 */
+      *(uint32_t*)g_mqttData.inverter.state = *(uint32_t*)invState;
     }
     osMutexRelease(globalDataMutex);
     

@@ -58,6 +58,9 @@ extern DMA_HandleTypeDef hdma_adc1;
 /* 布局: [CH0,CH1,CH2,CH3,CH4,CH5,CH6] × 4组 */
 volatile uint16_t g_adcDMABuffer[ADC_DMA_BUFFER_SIZE];
 
+/* ADC原始值缓冲区 - 双缓冲处理后存储 */
+volatile uint16_t g_adcRawValue[ADC_IDX_COUNT];
+
 /* DMA传输标志 */
 volatile uint8_t g_adcDMAHalfFlag = 0;
 volatile uint8_t g_adcDMAFullFlag = 0;
@@ -203,36 +206,62 @@ void ADC_DMA_Stop(void)
 }
 
 /**
-  * @brief  处理DMA半传输完成
+  * @brief  处理DMA半传输完成 - 双缓冲前半部分
   * @param  None
   * @retval None
   * @note   在半传输完成回调中调用
   *         前半缓冲区: g_adcDMABuffer[0] ~ g_adcDMABuffer[13]
+  *         此时DMA正在写入后半缓冲区，可以安全读取前半
   */
 void ADC_DMA_ProcessHalf(void)
 {
+  /* 处理前半缓冲区数据 (7通道 × 2组 = 14个样本) */
+  /* 注意：只处理2组而不是4组，减少单次处理时间 */
+  for (uint8_t ch = 0; ch < ADC_IDX_COUNT; ch++)
+  {
+    uint32_t sum = 0;
+    /* 前半缓冲区布局: [CH0,CH1,CH2,CH3,CH4,CH5,CH6] × 2组 */
+    for (uint8_t i = 0; i < 2; i++)
+    {
+      sum += g_adcDMABuffer[ch + i * ADC_IDX_COUNT];
+    }
+    g_adcRawValue[ch] = sum / 2;  /* 取平均值 */
+  }
+  
   g_adcDMAHalfFlag = 1;
-  /* 可以在这里处理前半缓冲区数据 */
 }
 
 /**
-  * @brief  处理DMA传输完成
+  * @brief  处理DMA传输完成 - 双缓冲后半部分
   * @param  None
   * @retval None
   * @note   在传输完成回调中调用
   *         后半缓冲区: g_adcDMABuffer[14] ~ g_adcDMABuffer[27]
+  *         此时DMA正在写入前半缓冲区(循环模式)，可以安全读取后半
   */
 void ADC_DMA_ProcessFull(void)
 {
+  /* 处理后半缓冲区数据 (7通道 × 2组 = 14个样本) */
+  for (uint8_t ch = 0; ch < ADC_IDX_COUNT; ch++)
+  {
+    uint32_t sum = 0;
+    /* 后半缓冲区布局: [CH0,CH1,CH2,CH3,CH4,CH5,CH6] × 2组 */
+    for (uint8_t i = 0; i < 2; i++)
+    {
+      sum += g_adcDMABuffer[ch + 14 + i * ADC_IDX_COUNT];  /* 偏移14 */
+    }
+    g_adcRawValue[ch] = sum / 2;  /* 取平均值 */
+  }
+  
   g_adcDMAFullFlag = 1;
-  /* 可以在这里处理后半缓冲区数据 */
 }
 
 /**
-  * @brief  获取指定通道的原始值 (从DMA缓冲区)
+  * @brief  获取指定通道的原始值 (双缓冲处理后)
   * @param  index: 通道索引
   * @retval ADC原始值 (0-4095)
-  * @note   返回4组采样的平均值
+  * @note   返回双缓冲处理后的值，无需再计算平均值
+  *         数据在DMA半传输/全传输中断中已处理
   */
 uint16_t ADC_GetRawValue(ADC_Index_t index)
 {
@@ -241,16 +270,9 @@ uint16_t ADC_GetRawValue(ADC_Index_t index)
     return 0;
   }
 
-  /* 计算4组采样的平均值 */
-  /* DMA缓冲区布局: [CH0,CH1,CH2,CH3,CH4,CH5,CH6] × 4组 */
-  uint32_t sum = 0;
-
-  for (uint8_t i = 0; i < 4; i++)
-  {
-    sum += g_adcDMABuffer[index + i * ADC_CHANNEL_NUM];
-  }
-
-  return (uint16_t)(sum / 4);
+  /* 直接返回双缓冲处理后的值 */
+  /* 数据在ADC_DMA_ProcessHalf/ProcessFull中已计算平均值 */
+  return g_adcRawValue[index];
 }
 
 /**
