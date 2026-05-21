@@ -82,6 +82,7 @@ osThreadId_t monitorTaskHandle;
 
 /* 信号量、互斥量、队列句柄 */
 osSemaphoreId_t adcDoneSem;
+osSemaphoreId_t modbusTxCompleteSem;
 osMutexId_t globalDataMutex;
 osMessageQueueId_t keyQueue;
 
@@ -175,6 +176,13 @@ static void Create_SyncObjects(void)
   /* 创建ADC完成二进制信号量 */
   adcDoneSem = osSemaphoreNew(1, 0, NULL);
   if (adcDoneSem == NULL)
+  {
+    Error_Handler();
+  }
+  
+  /* 创建Modbus发送完成二进制信号量 */
+  modbusTxCompleteSem = osSemaphoreNew(1, 0, NULL);
+  if (modbusTxCompleteSem == NULL)
   {
     Error_Handler();
   }

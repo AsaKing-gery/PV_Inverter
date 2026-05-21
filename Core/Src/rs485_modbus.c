@@ -24,8 +24,12 @@
 #include "rs485_modbus.h"
 #include "usart.h"
 #include "data.h"
+#include "cmsis_os.h"
 #include <string.h>
 #include <stdio.h>
+
+/* 外部信号量句柄 - 在task.c中创建 */
+extern osSemaphoreId_t modbusTxCompleteSem;
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -160,18 +164,50 @@ static bool Modbus_ValidateFrame(void)
 }
 
 /**
-  * @brief  发送响应帧
+  * @brief  发送响应帧 - DMA方式 (完全非阻塞)
+  * @param  data: 发送数据缓冲区
+  * @param  len: 数据长度
+  * @retval None
+  * @note   使用DMA发送，通过信号量等待完成，任务可切换
+  *         信号量modbusTxCompleteSem在task.c中创建
   */
 static void Modbus_SendResponse(uint8_t* data, uint16_t len)
 {
   /* 切换到发送模式 */
   RS485_SetDirection(true);
   
-  /* 发送数据 */
-  HAL_UART_Transmit(&huart3, data, len, 100);
+  /* 清除信号量 (防止之前残留) */
+  osSemaphoreAcquire(modbusTxCompleteSem, 0);
+  
+  /* 启动DMA发送 */
+  HAL_UART_Transmit_DMA(&huart3, data, len);
+  
+  /* 等待发送完成 - 使用信号量 (完全非阻塞) */
+  /* 在等待期间，RTOS会调度其他任务执行 */
+  if (osSemaphoreAcquire(modbusTxCompleteSem, 100) != osOK)
+  {
+    /* 超时，停止DMA */
+    HAL_UART_DMAStop(&huart3);
+  }
   
   /* 切换回接收模式 */
   RS485_SetDirection(false);
+}
+
+/**
+  * @brief  UART发送完成回调 (DMA方式)
+  * @note   DMA发送完成后自动调用，释放信号量通知发送任务
+  */
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart == &huart3)
+  {
+    /* 释放信号量，通知Modbus_SendResponse发送完成 */
+    if (modbusTxCompleteSem != NULL)
+    {
+      osSemaphoreRelease(modbusTxCompleteSem);
+    }
+  }
 }
 
 /**
@@ -317,6 +353,8 @@ void Modbus_Init(void)
   
   /* 初始状态：接收模式 */
   RS485_SetDirection(false);
+  
+  /* 注意：modbusTxCompleteSem信号量在task.c的Create_SyncObjects中创建 */
   
   /* 初始化寄存器表 */
   memset(&g_modbusRegs, 0, sizeof(g_modbusRegs));
