@@ -1,0 +1,17 @@
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_bidi.c
+pv_inverter\lv_bidi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stddef.h
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_bidi.h
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/src/misc/../lv_conf_internal.h
+pv_inverter\lv_bidi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/src/misc/../lv_conf_kconfig.h
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/lv_conf.h
+pv_inverter\lv_bidi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdbool.h
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_txt.h
+pv_inverter\lv_bidi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdarg.h
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_area.h
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/src/misc/../font/lv_font.h
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/src/misc/../font/lv_symbol_def.h
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_printf.h
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_types.h
+pv_inverter\lv_bidi.o: ../Middlewares/Third_Party/lvgl/src/misc/../misc/lv_mem.h
+pv_inverter\lv_bidi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\string.h

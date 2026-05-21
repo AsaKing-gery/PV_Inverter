@@ -1,0 +1,734 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.43.1.0
+Copyright (C) 2025 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 1, 11, LIC=TIVNB-24TW1-VEAHA-1N39X-WVZY4-7R1SS
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.43.0.0
+Toolchain Path:  D:\SOFT\Keil5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.43.0.0
+Dialog DLL:      DCM.DLL V1.17.5.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.3.1.0
+Dialog DLL:      TCM.DLL V1.56.6.0
+ 
+<h2>Project:</h2>
+D:\Apro\PV Micro-inverter\PV_Inverter\MDK-ARM\PV_Inverter.uvprojx
+Project File Date:  05/21/2026
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\SOFT\Keil5\ARM\ARMCC\Bin'
+Rebuild target 'PV_Inverter'
+assembling startup_stm32f407xx.s...
+compiling iwdg.c...
+compiling fsmc.c...
+compiling freertos.c...
+compiling gpio.c...
+compiling stm32f4xx_it.c...
+compiling tim.c...
+compiling dma.c...
+compiling usart.c...
+compiling main.c...
+compiling adc.c...
+compiling spi.c...
+compiling stm32f4xx_hal_timebase_tim.c...
+compiling stm32f4xx_hal_msp.c...
+compiling stm32f4xx_hal_tim.c...
+compiling stm32f4xx_hal_flash_ex.c...
+compiling stm32f4xx_hal_rcc.c...
+compiling stm32f4xx_hal_adc_ex.c...
+compiling stm32f4xx_hal_adc.c...
+compiling stm32f4xx_hal_tim_ex.c...
+compiling stm32f4xx_hal_rcc_ex.c...
+compiling stm32f4xx_hal_flash_ramfunc.c...
+compiling stm32f4xx_hal_flash.c...
+compiling stm32f4xx_hal_gpio.c...
+compiling stm32f4xx_hal_dma.c...
+compiling stm32f4xx_hal_dma_ex.c...
+compiling stm32f4xx_hal.c...
+compiling stm32f4xx_hal_pwr.c...
+compiling stm32f4xx_hal_sram.c...
+compiling stm32f4xx_ll_fsmc.c...
+compiling stm32f4xx_hal_exti.c...
+compiling event_groups.c...
+compiling stm32f4xx_hal_nor.c...
+compiling croutine.c...
+compiling stream_buffer.c...
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(147): error:  #20: identifier "TaskHandle_t" is undefined
+  	volatile TaskHandle_t xTaskWaitingToReceive; /* Holds the handle of a task waiting for data, or NULL if no tasks are waiting. */
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(148): error:  #20: identifier "TaskHandle_t" is undefined
+  	volatile TaskHandle_t xTaskWaitingToSend;	/* Holds the handle of a task waiting to send data to a message buffer that is full. */
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(232): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  			configASSERT( xBufferSizeBytes > sbBYTES_TO_STORE_MESSAGE_LENGTH );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(238): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  			configASSERT( xBufferSizeBytes > 0 );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(240): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( xTriggerLevelBytes <= xBufferSizeBytes );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(293): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( pucStreamBufferStorageArea );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(294): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( pxStaticStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(295): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( xTriggerLevelBytes <= xBufferSizeBytes );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(319): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( xBufferSizeBytes > sbBYTES_TO_STORE_MESSAGE_LENGTH );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(327): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  			configASSERT( xSize == sizeof( StreamBuffer_t ) );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(363): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(401): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(412): warning:  #223-D: function "taskENTER_CRITICAL" declared implicitly
+  	taskENTER_CRITICAL();
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(435): warning:  #223-D: function "taskEXIT_CRITICAL" declared implicitly
+  	taskEXIT_CRITICAL();
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(446): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(475): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(499): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(514): error:  #20: identifier "TimeOut_t" is undefined
+  TimeOut_t xTimeOut;
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(516): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pvTxData );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(517): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(528): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( xRequiredSpace > xDataLengthBytes );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(537): warning:  #223-D: function "vTaskSetTimeOutState" declared implicitly
+  		vTaskSetTimeOutState( &xTimeOut );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(543): warning:  #223-D: function "taskENTER_CRITICAL" declared implicitly
+  			taskENTER_CRITICAL();
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(550): warning:  #223-D: function "xTaskNotifyStateClear" declared implicitly
+  					( void ) xTaskNotifyStateClear( NULL );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(553): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  					configASSERT( pxStreamBuffer->xTaskWaitingToSend == NULL );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(554): warning:  #223-D: function "xTaskGetCurrentTaskHandle" declared implicitly
+  					pxStreamBuffer->xTaskWaitingToSend = xTaskGetCurrentTaskHandle();
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(558): warning:  #223-D: function "taskEXIT_CRITICAL" declared implicitly
+  					taskEXIT_CRITICAL();
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(562): warning:  #223-D: function "taskEXIT_CRITICAL" declared implicitly
+  			taskEXIT_CRITICAL();
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(565): warning:  #223-D: function "xTaskNotifyWait" declared implicitly
+  			( void ) xTaskNotifyWait( ( uint32_t ) 0, ( uint32_t ) 0, NULL, xTicksToWait );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(568): warning:  #223-D: function "xTaskCheckForTimeOut" declared implicitly
+  		} while( xTaskCheckForTimeOut( &xTimeOut, &xTicksToWait ) == pdFALSE );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(593): warning:  #223-D: function "vTaskSuspendAll" declared implicitly
+  			sbSEND_COMPLETED( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(593): warning:  #223-D: function "xTaskNotify" declared implicitly
+  			sbSEND_COMPLETED( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(593): error:  #20: identifier "eNoAction" is undefined
+  			sbSEND_COMPLETED( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(593): warning:  #223-D: function "xTaskResumeAll" declared implicitly
+  			sbSEND_COMPLETED( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(619): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pvTxData );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(620): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(643): warning:  #223-D: function "xTaskNotifyFromISR" declared implicitly
+  			sbSEND_COMPLETE_FROM_ISR( pxStreamBuffer, pxHigherPriorityTaskWoken );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(643): error:  #20: identifier "eNoAction" is undefined
+  			sbSEND_COMPLETE_FROM_ISR( pxStreamBuffer, pxHigherPriorityTaskWoken );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(721): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pvRxData );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(722): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(742): warning:  #223-D: function "taskENTER_CRITICAL" declared implicitly
+  		taskENTER_CRITICAL();
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(754): warning:  #223-D: function "xTaskNotifyStateClear" declared implicitly
+  				( void ) xTaskNotifyStateClear( NULL );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(757): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  				configASSERT( pxStreamBuffer->xTaskWaitingToReceive == NULL );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(758): warning:  #223-D: function "xTaskGetCurrentTaskHandle" declared implicitly
+  				pxStreamBuffer->xTaskWaitingToReceive = xTaskGetCurrentTaskHandle();
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(765): warning:  #223-D: function "taskEXIT_CRITICAL" declared implicitly
+  		taskEXIT_CRITICAL();
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(771): warning:  #223-D: function "xTaskNotifyWait" declared implicitly
+  			( void ) xTaskNotifyWait( ( uint32_t ) 0, ( uint32_t ) 0, NULL, xTicksToWait );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(800): warning:  #223-D: function "vTaskSuspendAll" declared implicitly
+  			sbRECEIVE_COMPLETED( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(800): warning:  #223-D: function "xTaskNotify" declared implicitly
+  			sbRECEIVE_COMPLETED( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(800): error:  #20: identifier "eNoAction" is undefined
+  			sbRECEIVE_COMPLETED( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(800): warning:  #223-D: function "xTaskResumeAll" declared implicitly
+  			sbRECEIVE_COMPLETED( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(823): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(848): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  			configASSERT( xBytesAvailable == 0 );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(869): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pvRxData );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(870): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(900): warning:  #223-D: function "xTaskNotifyFromISR" declared implicitly
+  			sbRECEIVE_COMPLETED_FROM_ISR( pxStreamBuffer, pxHigherPriorityTaskWoken );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(900): error:  #20: identifier "eNoAction" is undefined
+  			sbRECEIVE_COMPLETED_FROM_ISR( pxStreamBuffer, pxHigherPriorityTaskWoken );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(976): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(999): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1034): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1040): warning:  #223-D: function "xTaskNotifyFromISR" declared implicitly
+  			( void ) xTaskNotifyFromISR( ( pxStreamBuffer )->xTaskWaitingToReceive,
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1042): error:  #20: identifier "eNoAction" is undefined
+  										 eNoAction,
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1064): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( pxStreamBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1070): warning:  #223-D: function "xTaskNotifyFromISR" declared implicitly
+  			( void ) xTaskNotifyFromISR( ( pxStreamBuffer )->xTaskWaitingToSend,
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1072): error:  #20: identifier "eNoAction" is undefined
+  										 eNoAction,
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1092): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( xCount > ( size_t ) 0 );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1102): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( ( xNextHead + xFirstLength ) <= pxStreamBuffer->xLength );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1110): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( ( xCount - xFirstLength ) <= pxStreamBuffer->xLength );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1152): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( xFirstLength <= xMaxCount );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1153): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( ( xNextTail + xFirstLength ) <= pxStreamBuffer->xLength );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1161): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  			configASSERT( xCount <= xMaxCount );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c(1224): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( memset( pucBuffer, ( int ) xWriteValue, xBufferSizeBytes ) == pucBuffer );
+../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c: 62 warnings, 9 errors
+compiling list.c...
+compiling queue.c...
+compiling timers.c...
+compiling tasks.c...
+compiling heap_4.c...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(120): warning:  #223-D: function "vTaskSuspendAll" declared implicitly
+  	vTaskSuspendAll();
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(151): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  					configASSERT( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) == 0 );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(196): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  						configASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) == 0 );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(245): warning:  #223-D: function "xTaskResumeAll" declared implicitly
+  	( void ) xTaskResumeAll();
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(261): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( ( ( ( size_t ) pvReturn ) & ( size_t ) portBYTE_ALIGNMENT_MASK ) == 0 );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(281): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( ( pxLink->xBlockSize & xBlockAllocatedBit ) != 0 );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(282): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( pxLink->pxNextFreeBlock == NULL );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(292): warning:  #223-D: function "vTaskSuspendAll" declared implicitly
+  				vTaskSuspendAll();
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(300): warning:  #223-D: function "xTaskResumeAll" declared implicitly
+  				( void ) xTaskResumeAll();
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(447): warning:  #223-D: function "vTaskSuspendAll" declared implicitly
+  	vTaskSuspendAll();
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(477): warning:  #223-D: function "xTaskResumeAll" declared implicitly
+  	xTaskResumeAll();
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(483): warning:  #223-D: function "taskENTER_CRITICAL" declared implicitly
+  	taskENTER_CRITICAL();
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c(490): warning:  #223-D: function "taskEXIT_CRITICAL" declared implicitly
+  	taskEXIT_CRITICAL();
+../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c: 13 warnings, 0 errors
+compiling stm32f4xx_hal_cortex.c...
+compiling port.c...
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(229): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( uxCriticalNesting == ~0UL );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(304): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( configMAX_SYSCALL_INTERRUPT_PRIORITY );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(309): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( portCPUID != portCORTEX_M7_r0p1_ID );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(310): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( portCPUID != portCORTEX_M7_r0p0_ID );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(335): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( ucMaxPriorityValue == ( configKERNEL_INTERRUPT_PRIORITY & ucMaxPriorityValue ) );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(363): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  			configASSERT( ( portMAX_PRIGROUP_BITS - ulMaxPRIGROUPValue ) == configPRIO_BITS );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(407): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( uxCriticalNesting == 1000UL );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(423): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( ( portNVIC_INT_CTRL_REG & portVECTACTIVE_MASK ) == 0 );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(430): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  	configASSERT( uxCriticalNesting );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(511): warning:  #223-D: function "xTaskIncrementTick" declared implicitly
+  		if( xTaskIncrementTick() != pdFALSE )
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(767): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  			configASSERT( ucCurrentPriority >= ucMaxSysCallPriority );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c(783): warning:  #223-D: function "taskDISABLE_INTERRUPTS" declared implicitly
+  		configASSERT( ( portAIRCR_REG & portPRIORITY_GROUP_MASK ) <= ulMaxPRIGROUPValue );
+../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c: 12 warnings, 0 errors
+compiling stm32f4xx_hal_pwr_ex.c...
+compiling system_stm32f4xx.c...
+compiling stm32f4xx_hal_iwdg.c...
+compiling stm32f4xx_hal_pccard.c...
+compiling stm32f4xx_hal_nand.c...
+compiling stm32f4xx_hal_spi.c...
+compiling stm32f4xx_hal_uart.c...
+compiling display_ui.c...
+../Middlewares/Third_Party/lvgl/src/lvgl.h(17): error:  #5: cannot open source input file "../lvgl.h": No such file or directory
+  #include "../lvgl.h"
+../Core/Src/display_ui.c: 0 warnings, 1 error
+compiling task.c...
+../Middlewares/Third_Party/lvgl/src/lvgl.h(17): error:  #5: cannot open source input file "../lvgl.h": No such file or directory
+  #include "../lvgl.h"
+../Core/Src/task.c: 0 warnings, 1 error
+compiling cmsis_os2.c...
+compiling adc_convert.c...
+../Core/Src/adc_convert.c(545): error:  #20: identifier "osSemaphoreId_t" is undefined
+      extern osSemaphoreId_t adcDoneSem;
+../Core/Src/adc_convert.c(548): warning:  #223-D: function "osSemaphoreRelease" declared implicitly
+        osSemaphoreRelease(adcDoneSem);
+../Core/Src/adc_convert.c: 1 warning, 1 error
+compiling data.c...
+compiling lv_disp.c...
+compiling lv_event.c...
+../Middlewares/Third_Party/lvgl/src/core/lv_event.c(117): warning:  #188-D: enumerated type mixed with another type
+      return e->code & ~LV_EVENT_PREPROCESS;
+../Middlewares/Third_Party/lvgl/src/core/lv_event.c: 1 warning, 0 errors
+compiling lv_group.c...
+compiling mppt.c...
+compiling spwm.c...
+../Core/Src/spwm.c(96): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(96): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(96): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(96): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(96): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(96): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(96): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(96): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(97): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(97): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(97): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(97): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(97): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(97): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(97): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(97): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(98): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(98): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(98): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(98): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(98): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(98): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(98): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(98): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(99): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(99): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(99): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(99): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(99): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(99): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(99): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(99): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(100): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(100): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(100): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(100): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(100): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(100): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(100): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(100): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(101): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(101): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(101): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(101): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(101): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(101): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(101): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(101): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(102): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(102): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(102): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(102): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(102): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(102): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(102): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(102): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(103): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(103): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(103): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(103): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(103): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(103): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(103): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(103): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(104): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(104): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(104): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(104): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(104): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(104): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(104): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(104): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(105): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(105): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(105): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(105): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(105): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(105): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(105): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(105): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(106): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(106): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(106): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(106): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(106): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(106): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(106): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(106): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(107): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(107): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(107): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(107): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(107): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(107): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(107): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(107): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(108): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(108): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(108): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(108): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(108): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(108): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(108): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(108): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(109): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(109): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(109): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(109): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(109): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(109): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(109): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(109): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(110): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(110): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(110): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(110): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(110): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(110): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(110): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(110): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(111): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(111): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(111): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(111): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(111): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(111): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(111): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c(111): warning:  #69-D: integer conversion resulted in truncation
+../Core/Src/spwm.c: 128 warnings, 0 errors
+compiling lv_indev.c...
+compiling lv_obj.c...
+../Middlewares/Third_Party/lvgl/src/core/../extra/libs/gif/../../../lvgl.h(17): error:  #5: cannot open source input file "../lvgl.h": No such file or directory
+  #include "../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/core/lv_obj.c: 0 warnings, 1 error
+compiling lv_obj_class.c...
+compiling lv_obj_draw.c...
+../Middlewares/Third_Party/lvgl/src/core/lv_obj_draw.c(392): warning:  #188-D: enumerated type mixed with another type
+      if(obj->spec_attr) return obj->spec_attr->layer_type;
+../Middlewares/Third_Party/lvgl/src/core/lv_obj_draw.c: 1 warning, 0 errors
+compiling lv_indev_scroll.c...
+compiling lv_obj_style_gen.c...
+compiling lv_obj_scroll.c...
+compiling lv_obj_tree.c...
+compiling lv_obj_style.c...
+compiling lv_obj_pos.c...
+compiling lv_theme.c...
+../Middlewares/Third_Party/lvgl/src/core/lv_theme.c(9): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+  #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/core/lv_theme.c: 0 warnings, 1 error
+compiling lv_refr.c...
+compiling lv_draw.c...
+compiling lv_draw_arc.c...
+compiling lv_draw_img.c...
+compiling lv_draw_label.c...
+compiling lv_draw_layer.c...
+compiling lv_draw_transform.c...
+compiling lv_draw_rect.c...
+compiling lv_draw_triangle.c...
+compiling lv_draw_line.c...
+compiling lv_img_cache.c...
+compiling esp32_wifi.c...
+../Core/Src/esp32_wifi.c(557): warning:  #223-D: function "osDelay" declared implicitly
+      osDelay(1);
+../Core/Src/esp32_wifi.c(696): error:  #20: identifier "osMutexId_t" is undefined
+    extern osMutexId_t globalDataMutex;
+../Core/Src/esp32_wifi.c(699): warning:  #223-D: function "osMutexAcquire" declared implicitly
+    osMutexAcquire(globalDataMutex, osWaitForever);
+../Core/Src/esp32_wifi.c(699): error:  #20: identifier "osWaitForever" is undefined
+    osMutexAcquire(globalDataMutex, osWaitForever);
+../Core/Src/esp32_wifi.c(752): warning:  #223-D: function "osMutexRelease" declared implicitly
+    osMutexRelease(globalDataMutex);
+../Core/Src/esp32_wifi.c(73): warning:  #177-D: variable "lineBuffer"  was declared but never referenced
+  static uint8_t lineBuffer[AT_RSP_BUFFER_SIZE];
+../Core/Src/esp32_wifi.c: 4 warnings, 2 errors
+compiling display.c...
+../Middlewares/Third_Party/lvgl/src/lvgl.h(17): error:  #5: cannot open source input file "../lvgl.h": No such file or directory
+  #include "../lvgl.h"
+../Core/Src/display.c: 0 warnings, 1 error
+compiling lv_draw_sw.c...
+compiling lv_draw_mask.c...
+compiling lv_img_buf.c...
+compiling pll_sogi.c...
+../Core/Src/pll_sogi.c(307): warning:  #177-D: variable "omega_nominal"  was declared but never referenced
+    float omega_nominal = 2.0f * PI * PLL_GRID_FREQ_NOMINAL;
+../Core/Src/pll_sogi.c: 1 warning, 0 errors
+compiling lv_img_decoder.c...
+compiling lv_draw_sw_arc.c...
+compiling protection.c...
+compiling lv_draw_sw_dither.c...
+compiling lv_draw_sw_letter.c...
+compiling lv_draw_sw_layer.c...
+compiling lv_draw_sw_gradient.c...
+compiling lv_draw_sw_polygon.c...
+compiling rs485_modbus.c...
+compiling lv_draw_sw_blend.c...
+compiling lv_draw_sw_img.c...
+compiling lv_draw_sw_line.c...
+compiling lv_draw_sw_transform.c...
+compiling lv_hal_tick.c...
+compiling lv_anim_timeline.c...
+compiling lv_hal_indev.c...
+compiling lv_bidi.c...
+compiling lv_async.c...
+compiling lv_log.c...
+compiling lv_area.c...
+compiling lv_hal_disp.c...
+../Middlewares/Third_Party/lvgl/src/hal/lv_hal_disp.c(582): warning:  #188-D: enumerated type mixed with another type
+      return disp->driver->rotated;
+../Middlewares/Third_Party/lvgl/src/hal/lv_hal_disp.c: 1 warning, 0 errors
+compiling lv_draw_sw_rect.c...
+../Middlewares/Third_Party/lvgl/src/draw/sw/lv_draw_sw_rect.c(234): warning:  #546-D: transfer of control bypasses initialization of:
+            variable "mask_any_center"  (declared at line 280)
+          goto bg_clean_up;
+          ^
+../Middlewares/Third_Party/lvgl/src/draw/sw/lv_draw_sw_rect.c: 1 warning, 0 errors
+compiling lv_anim.c...
+compiling lv_gc.c...
+compiling lv_ll.c...
+compiling lv_color.c...
+compiling lv_fs.c...
+compiling lv_math.c...
+compiling lv_mem.c...
+../Middlewares/Third_Party/lvgl/src/misc/lv_mem.c(324): warning:  #111-D: statement is unreachable
+      return NULL;
+../Middlewares/Third_Party/lvgl/src/misc/lv_mem.c: 1 warning, 0 errors
+compiling lv_lru.c...
+../Middlewares/Third_Party/lvgl/src/misc/lv_lru.c(238): warning:  #68-D: integer conversion resulted in a change of sign
+      uint32_t i = 0, min_index = -1;
+../Middlewares/Third_Party/lvgl/src/misc/lv_lru.c(239): warning:  #68-D: integer conversion resulted in a change of sign
+      uint64_t min_access_count = -1;
+../Middlewares/Third_Party/lvgl/src/misc/lv_lru.c: 2 warnings, 0 errors
+compiling lv_style.c...
+../Middlewares/Third_Party/lvgl/src/misc/lv_style.c(214): warning:  #188-D: enumerated type mixed with another type
+      return last_custom_prop_id;
+../Middlewares/Third_Party/lvgl/src/misc/lv_style.c(219): warning:  #188-D: enumerated type mixed with another type
+      return last_custom_prop_id - _LV_STYLE_LAST_BUILT_IN_PROP;
+../Middlewares/Third_Party/lvgl/src/misc/lv_style.c(290): warning:  #188-D: enumerated type mixed with another type
+      lv_style_set_prop_internal(style, prop | meta, null_style_value, lv_style_set_prop_meta_helper);
+../Middlewares/Third_Party/lvgl/src/misc/lv_style.c: 3 warnings, 0 errors
+compiling lv_style_gen.c...
+compiling lv_printf.c...
+compiling lv_txt_ap.c...
+compiling lv_utils.c...
+compiling lv_timer.c...
+compiling lv_font_loader.c...
+../Middlewares/Third_Party/lvgl/src/font/../lvgl.h(17): error:  #5: cannot open source input file "../lvgl.h": No such file or directory
+  #include "../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_loader.c: 0 warnings, 1 error
+compiling lv_font.c...
+compiling lv_font_fmt_txt.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_fmt_txt.c(137): warning:  #111-D: statement is unreachable
+      return NULL;
+../Middlewares/Third_Party/lvgl/src/font/lv_font_fmt_txt.c: 1 warning, 0 errors
+compiling lv_font_montserrat_10.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_10.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_10.c: 0 warnings, 1 error
+compiling lv_font_montserrat_8.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_8.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_8.c: 0 warnings, 1 error
+compiling lv_font_montserrat_12.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_12.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_12.c: 0 warnings, 1 error
+compiling lv_font_montserrat_14.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_14.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_14.c: 0 warnings, 1 error
+compiling lv_txt.c...
+compiling lv_font_montserrat_16.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_16.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_16.c: 0 warnings, 1 error
+compiling lv_font_montserrat_18.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_18.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_18.c: 0 warnings, 1 error
+compiling lv_font_montserrat_22.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_22.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_22.c: 0 warnings, 1 error
+compiling lv_tlsf.c...
+../Middlewares/Third_Party/lvgl/src/misc/lv_tlsf.c(897): warning:  #68-D: integer conversion resulted in a change of sign
+          offset_to_block(pool, -(int)block_header_overhead);
+../Middlewares/Third_Party/lvgl/src/misc/lv_tlsf.c(999): warning:  #68-D: integer conversion resulted in a change of sign
+      block = offset_to_block(mem, -(tlsfptr_t)block_header_overhead);
+../Middlewares/Third_Party/lvgl/src/misc/lv_tlsf.c(1017): warning:  #68-D: integer conversion resulted in a change of sign
+      block_header_t * block = offset_to_block(pool, -(int)block_header_overhead);
+../Middlewares/Third_Party/lvgl/src/misc/lv_tlsf.c: 3 warnings, 0 errors
+compiling lv_font_montserrat_20.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_20.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_20.c: 0 warnings, 1 error
+compiling lv_font_montserrat_24.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_24.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_24.c: 0 warnings, 1 error
+compiling lv_font_montserrat_26.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_26.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_26.c: 0 warnings, 1 error
+compiling lv_font_montserrat_28.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_28.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_28.c: 0 warnings, 1 error
+compiling lv_font_montserrat_30.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_30.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_30.c: 0 warnings, 1 error
+compiling lv_font_montserrat_32.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_32.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_32.c: 0 warnings, 1 error
+compiling lv_font_montserrat_36.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_36.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_36.c: 0 warnings, 1 error
+compiling lv_font_montserrat_38.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_38.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_38.c: 0 warnings, 1 error
+compiling lv_font_montserrat_34.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_34.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_34.c: 0 warnings, 1 error
+compiling lv_font_montserrat_40.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_40.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_40.c: 0 warnings, 1 error
+compiling lv_font_montserrat_46.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_46.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_46.c: 0 warnings, 1 error
+compiling lv_font_montserrat_42.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_42.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_42.c: 0 warnings, 1 error
+compiling lv_font_montserrat_44.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_44.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_44.c: 0 warnings, 1 error
+compiling lv_font_unscii_8.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_unscii_8.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_unscii_8.c: 0 warnings, 1 error
+compiling lv_font_montserrat_48.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_48.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_montserrat_48.c: 0 warnings, 1 error
+compiling lv_font_unscii_16.c...
+../Middlewares/Third_Party/lvgl/src/font/lv_font_unscii_16.c(10): error:  #5: cannot open source input file "../../lvgl.h": No such file or directory
+      #include "../../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/font/lv_font_unscii_16.c: 0 warnings, 1 error
+compiling lv_btn.c...
+compiling lv_btnmatrix.c...
+compiling lv_checkbox.c...
+compiling lv_bar.c...
+compiling lv_canvas.c...
+compiling lv_roller.c...
+compiling lv_textarea.c...
+compiling lv_table.c...
+compiling lv_arc.c...
+compiling lv_line.c...
+compiling lv_dropdown.c...
+compiling lv_label.c...
+compiling lv_switch.c...
+compiling lv_slider.c...
+compiling lv_img.c...
+compiling lcd_ex.c...
+../Middlewares/Third_Party/lvgl/LCD/lcd_ex.c(28): error:  #5: cannot open source input file "./SYSTEM/delay/delay.h": No such file or directory
+  #include "./SYSTEM/delay/delay.h"
+../Middlewares/Third_Party/lvgl/LCD/lcd_ex.c: 0 warnings, 1 error
+compiling lcd.c...
+../Middlewares/Third_Party/lvgl/LCD/lcd.c(30): error:  #5: cannot open source input file "./BSP/LCD/lcd.h": No such file or directory
+  #include "./BSP/LCD/lcd.h"
+../Middlewares/Third_Party/lvgl/LCD/lcd.c: 0 warnings, 1 error
+compiling touch.c...
+../Middlewares/Third_Party/lvgl/LCD/touch/touch.c(33): error:  #5: cannot open source input file "./BSP/LCD/lcd.h": No such file or directory
+  #include "./BSP/LCD/lcd.h"
+../Middlewares/Third_Party/lvgl/LCD/touch/touch.c: 0 warnings, 1 error
+compiling lv_extra.c...
+../Middlewares/Third_Party/lvgl/src/extra/../lvgl.h(17): error:  #5: cannot open source input file "../lvgl.h": No such file or directory
+  #include "../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/extra/lv_extra.c: 0 warnings, 1 error
+compiling lv_theme_default.c...
+../Middlewares/Third_Party/lvgl/src/extra/themes/default/../../../lvgl.h(17): error:  #5: cannot open source input file "../lvgl.h": No such file or directory
+  #include "../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/extra/themes/default/lv_theme_default.c: 0 warnings, 1 error
+compiling lv_theme_basic.c...
+../Middlewares/Third_Party/lvgl/src/extra/themes/basic/../../../lvgl.h(17): error:  #5: cannot open source input file "../lvgl.h": No such file or directory
+  #include "../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/extra/themes/basic/lv_theme_basic.c: 0 warnings, 1 error
+compiling lv_chart.c...
+../Middlewares/Third_Party/lvgl/src/extra/widgets/chart/../../../lvgl.h(17): error:  #5: cannot open source input file "../lvgl.h": No such file or directory
+  #include "../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/extra/widgets/chart/lv_chart.c: 0 warnings, 1 error
+compiling lv_meter.c...
+../Middlewares/Third_Party/lvgl/src/extra/widgets/meter/../../../lvgl.h(17): error:  #5: cannot open source input file "../lvgl.h": No such file or directory
+  #include "../lvgl.h"
+../Middlewares/Third_Party/lvgl/src/extra/widgets/meter/lv_meter.c: 0 warnings, 1 error
+compiling lv_grid.c...
+../Middlewares/Third_Party/lvgl/src/extra/layouts/grid/lv_grid.c(583): warning:  #188-D: enumerated type mixed with another type
+      lv_grid_align_t col_align = get_cell_col_align(item);
+../Middlewares/Third_Party/lvgl/src/extra/layouts/grid/lv_grid.c(584): warning:  #188-D: enumerated type mixed with another type
+      lv_grid_align_t row_align = get_cell_row_align(item);
+../Middlewares/Third_Party/lvgl/src/extra/layouts/grid/lv_grid.c: 2 warnings, 0 errors
+compiling lv_flex.c...
+"PV_Inverter\PV_Inverter.axf" - 49 Error(s), 237 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                https://www.keil.com/pack/ARM.CMSIS.6.2.0.pack
+                ARM::CMSIS@6.2.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 6.1.1
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.16.0.pack
+                Keil::STM32F4xx_DFP@2.16.0
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  ./RTE/_PV_Inverter
+  D:/SOFT/Keil5/PACKS/ARM/CMSIS/6.2.0/CMSIS/Core/Include
+  D:/SOFT/Keil5/PACKS/Keil/STM32F4xx_DFP/2.16.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE@6.1.1
+      Include file:  CMSIS/Core/Include/tz_context.h
+Target not created.
+Build Time Elapsed:  00:00:38
+</pre>
+</body>
+</html>

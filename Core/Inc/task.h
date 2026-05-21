@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "cmsis_os.h"
+#include "cmsis_os2.h"
 #include <stdint.h>
 
 /* Exported types ------------------------------------------------------------*/

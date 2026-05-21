@@ -1,0 +1,16 @@
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/src/font/lv_font.c
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/src/font/lv_font.h
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/src/font/../lv_conf_internal.h
+pv_inverter\lv_font.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/src/font/../lv_conf_kconfig.h
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/lv_conf.h
+pv_inverter\lv_font.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stddef.h
+pv_inverter\lv_font.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdbool.h
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/src/font/lv_symbol_def.h
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/src/font/../misc/lv_area.h
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/src/font/../misc/lv_utils.h
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/src/font/../misc/lv_log.h
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/src/font/../misc/lv_types.h
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/src/font/../misc/lv_assert.h
+pv_inverter\lv_font.o: ../Middlewares/Third_Party/lvgl/src/font/../misc/lv_mem.h
+pv_inverter\lv_font.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\string.h

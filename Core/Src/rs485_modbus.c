@@ -469,17 +469,6 @@ void Modbus_UpdateRegisters(void)
 }
 
 /**
-  * @brief  UART空闲中断回调 (帧结束检测)
-  */
-void HAL_UART_IdleCpltCallback(UART_HandleTypeDef *huart)
-{
-  if (huart == &huart3)
-  {
-    frameReady = 1;
-  }
-}
-
-/**
   * @brief  UART接收中断回调
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)

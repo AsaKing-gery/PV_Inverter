@@ -100,7 +100,12 @@ typedef struct
 {
   char state[INVERTER_STATE_LEN]; /* 状态: RUN / STOP / FAULT */
   char mode[INVERTER_MODE_LEN];   /* 模式: ON_GRID / OFF_GRID */
+  char syncState[16];             /* 锁相状态: SYNCED / UNSYNC */
   float thd;                      /* 谐波失真 (%), 范围 2.0-5.0% */
+  float gridFreq;                 /* 电网频率 (Hz) */
+  float gridPhase;                /* 电网相位 (度) */
+  uint32_t faultCode;             /* 故障代码 */
+  char faultDesc[32];             /* 故障描述 */
 } Inverter_Data_t;
 
 /**

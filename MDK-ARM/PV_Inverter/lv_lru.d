@@ -1,0 +1,13 @@
+pv_inverter\lv_lru.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_lru.c
+pv_inverter\lv_lru.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_lru.h
+pv_inverter\lv_lru.o: ../Middlewares/Third_Party/lvgl/src/misc/../lv_conf_internal.h
+pv_inverter\lv_lru.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
+pv_inverter\lv_lru.o: ../Middlewares/Third_Party/lvgl/src/misc/../lv_conf_kconfig.h
+pv_inverter\lv_lru.o: ../Middlewares/Third_Party/lvgl/lv_conf.h
+pv_inverter\lv_lru.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_types.h
+pv_inverter\lv_lru.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stddef.h
+pv_inverter\lv_lru.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_math.h
+pv_inverter\lv_lru.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_mem.h
+pv_inverter\lv_lru.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\string.h
+pv_inverter\lv_lru.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_assert.h
+pv_inverter\lv_lru.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_log.h

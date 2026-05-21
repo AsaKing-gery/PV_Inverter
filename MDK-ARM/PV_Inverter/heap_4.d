@@ -1,0 +1,13 @@
+pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c
+pv_inverter\heap_4.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+pv_inverter\heap_4.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stddef.h
+pv_inverter\heap_4.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
+pv_inverter\heap_4.o: ../Core/Inc/FreeRTOSConfig.h
+pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+pv_inverter\heap_4.o: ../Core/Inc/task.h
+pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h

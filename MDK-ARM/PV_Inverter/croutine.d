@@ -1,0 +1,14 @@
+pv_inverter\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/croutine.c
+pv_inverter\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+pv_inverter\croutine.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stddef.h
+pv_inverter\croutine.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
+pv_inverter\croutine.o: ../Core/Inc/FreeRTOSConfig.h
+pv_inverter\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+pv_inverter\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+pv_inverter\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+pv_inverter\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+pv_inverter\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+pv_inverter\croutine.o: ../Core/Inc/task.h
+pv_inverter\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
+pv_inverter\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/croutine.h
+pv_inverter\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h

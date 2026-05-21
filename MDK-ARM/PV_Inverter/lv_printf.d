@@ -1,0 +1,10 @@
+pv_inverter\lv_printf.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_printf.c
+pv_inverter\lv_printf.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_printf.h
+pv_inverter\lv_printf.o: ../Middlewares/Third_Party/lvgl/src/misc/../lv_conf_internal.h
+pv_inverter\lv_printf.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
+pv_inverter\lv_printf.o: ../Middlewares/Third_Party/lvgl/src/misc/../lv_conf_kconfig.h
+pv_inverter\lv_printf.o: ../Middlewares/Third_Party/lvgl/lv_conf.h
+pv_inverter\lv_printf.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdarg.h
+pv_inverter\lv_printf.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stddef.h
+pv_inverter\lv_printf.o: ../Middlewares/Third_Party/lvgl/src/misc/lv_types.h
+pv_inverter\lv_printf.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdbool.h
