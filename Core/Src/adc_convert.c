@@ -508,12 +508,20 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc)
   * @brief  DMA传输完成回调
   * @param  hadc: ADC句柄
   * @retval None
+  * @note   ADC DMA完成中断，释放信号量adcDoneSem，唤醒控制任务
   */
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
   if (hadc == &hadc1)
   {
     ADC_DMA_ProcessFull();
+    
+    /* 释放ADC完成信号量，唤醒控制任务 */
+    extern osSemaphoreId_t adcDoneSem;
+    if (adcDoneSem != NULL)
+    {
+      osSemaphoreRelease(adcDoneSem);
+    }
   }
 }
 

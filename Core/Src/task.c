@@ -50,8 +50,8 @@ extern IWDG_HandleTypeDef hiwdg;
 /* 按键事件结构体 */
 typedef struct
 {
-  uint8_t keyCode;
-  uint8_t keyState;
+  uint8_t key_id;   /* 按键编号 1~5 */
+  uint8_t event;    /* 0 = 短按, 1 = 长按 */
 } KeyEvent;
 
 /* USER CODE END PTD */
@@ -396,8 +396,8 @@ void ControlTask(void *argument)
     }
     osMutexRelease(globalDataMutex);
     
-    /* 释放ADC完成信号量 (通知其他任务) */
-    osSemaphoreRelease(adcDoneSem);
+    /* 注意：ADC完成信号量adcDoneSem在HAL_ADC_ConvCpltCallback中释放 */
+    /* 用于通知WiFi任务数据已准备好，可以发送 */
     
     /* 周期计数 */
     cycleCount++;
@@ -611,18 +611,72 @@ void HMITask(void *argument)
   * @brief  按键扫描任务
   * @param  argument: 任务参数
   * @retval None
+  * @note   触发方式：周期10ms扫描
+  *         主循环逻辑：
+  *         - 轮询5个按键GPIO（PA7, PC4, PE2, PE3, PE4）的电平
+  *         - 消抖处理：连续5次读到低电平确认为按下
+  *         - 按下后发送按键事件到队列keyQueue
   */
 void KeyTask(void *argument)
 {
   /* USER CODE BEGIN KeyTask */
+  /* 按键扫描处理 */
+  /* 检测到按键后发送队列：osMessageQueuePut(keyQueue, &keyEvent, 0, 0); */
+  /* 按键配置：GPIO已在gpio.c中配置为输入模式 */
+  /* PA7, PC4, PE2, PE3, PE4 */
+  
+  /* 消抖计数器：连续检测到5次低电平才确认为按下 */
+  #define KEY_DEBOUNCE_COUNT  5
+  #define KEY_NUM             5
+  
+  /* 按键GPIO端口和引脚定义 */
+  GPIO_TypeDef* keyPorts[KEY_NUM] = {GPIOA, GPIOC, GPIOE, GPIOE, GPIOE};
+  uint16_t keyPins[KEY_NUM] = {GPIO_PIN_7, GPIO_PIN_4, GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4};
+  
+  /* 消抖计数器和状态 */
+  uint8_t debounceCnt[KEY_NUM] = {0};
+  uint8_t keyPressed[KEY_NUM] = {0};
+  
   KeyEvent keyEvent;
   
   for (;;)
   {
-    /* 按键扫描处理 */
-    /* 检测到按键后发送队列：osMessageQueuePut(keyQueue, &keyEvent, 0, 0); */
+    /* 轮询5个按键 */
+    for (uint8_t i = 0; i < KEY_NUM; i++)
+    {
+      /* 读取按键电平（低电平有效） */
+      GPIO_PinState pinState = HAL_GPIO_ReadPin(keyPorts[i], keyPins[i]);
+      
+      if (pinState == GPIO_PIN_RESET)
+      {
+        /* 按键被按下（低电平） */
+        if (debounceCnt[i] < KEY_DEBOUNCE_COUNT)
+        {
+          debounceCnt[i]++;
+          
+          /* 消抖完成，确认为按下 */
+          if (debounceCnt[i] >= KEY_DEBOUNCE_COUNT && !keyPressed[i])
+          {
+            keyPressed[i] = 1;
+            
+            /* 发送按键事件到队列 */
+            keyEvent.key_id = i + 1;  /* 按键编号1~5 */
+            keyEvent.event = 0;       /* 0 = 短按（暂不支持长按检测） */
+            
+            osMessageQueuePut(keyQueue, &keyEvent, 0, 0);
+          }
+        }
+      }
+      else
+      {
+        /* 按键释放（高电平） */
+        debounceCnt[i] = 0;
+        keyPressed[i] = 0;
+      }
+    }
     
-    osDelay(20);
+    /* 周期10ms运行 */
+    osDelay(10);
   }
   /* USER CODE END KeyTask */
 }
