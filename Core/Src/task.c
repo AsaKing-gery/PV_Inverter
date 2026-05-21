@@ -31,8 +31,10 @@
 #include "spwm.h"
 #include "pll_sogi.h"
 #include "protection.h"
+#include "esp32_wifi.h"
 #include "data.h"
 #include <string.h>
+#include <stdio.h>
 
 /* USER CODE END Includes */
 
@@ -404,16 +406,106 @@ void ControlTask(void *argument)
   * @brief  WiFi通信任务
   * @param  argument: 任务参数
   * @retval None
+  * @note   启动时初始化ESP32-C3，建立WiFi和MQTT连接
+  *         正常运行时周期性发送数据到MQTT Broker
   */
 void WiFiTask(void *argument)
 {
   /* USER CODE BEGIN WiFiTask */
+  
+  /* 等待系统稳定 */
+  osDelay(1000);
+  
+  /* 初始化ESP32模块 (只执行一次) */
+  bool initSuccess = false;
+  for (uint8_t retry = 0; retry < 3; retry++)
+  {
+    if (ESP32_Init())
+    {
+      initSuccess = true;
+      break;
+    }
+    osDelay(5000);  /* 失败后等待5秒重试 */
+  }
+  
+  if (!initSuccess)
+  {
+    /* 初始化失败，记录错误 */
+    strncpy(g_mqttStatus.state, "ERROR", sizeof(g_mqttStatus.state));
+    strncpy(g_mqttStatus.fw_version, "INIT_FAIL", sizeof(g_mqttStatus.fw_version));
+  }
+  else
+  {
+    strncpy(g_mqttStatus.state, "ONLINE", sizeof(g_mqttStatus.state));
+    strncpy(g_mqttStatus.fw_version, "V1.0.0", sizeof(g_mqttStatus.fw_version));
+  }
+  
+  /* 主循环 - 周期性发送数据 */
+  uint32_t heartbeatCount = 0;
+  uint32_t dataSendCount = 0;
+  uint32_t taskStartTick = osKernelGetTickCount();  /* 记录任务启动时间 */
+
   for (;;)
   {
-    /* WiFi通信处理 */
-    
-    osDelay(10);
+    if (ESP32_IsMQTTConnected())
+    {
+      /* 更新WiFi状态和运行时间 */
+      strncpy(g_mqttStatus.state, "ONLINE", sizeof(g_mqttStatus.state));
+      g_mqttStatus.uptime = (osKernelGetTickCount() - taskStartTick) / 1000;  /* 秒 */
+
+      /* 等待ADC数据就绪信号量 (由ControlTask释放) */
+      if (osSemaphoreAcquire(adcDoneSem, 1000) == osOK)
+      {
+        /* 发送二进制数据帧到ESP32
+         * ESP32接收后解析并打包成JSON发送给MQTT Broker
+         * 帧格式: [0xAA][0x55][LEN(2B)][DATA(32B)][CRC8]
+         */
+        if (ESP32_SendDataFrame())
+        {
+          dataSendCount++;
+          heartbeatCount++;
+
+          /* 更新发送计数 */
+          g_esp32Status.txCount = dataSendCount;
+
+          /* 每10次数据发送一次心跳保活 */
+          if (heartbeatCount >= 10)
+          {
+            ESP32_SendHeartbeat();
+            heartbeatCount = 0;
+          }
+        }
+        else
+        {
+          /* 发送失败，增加错误计数 */
+          g_esp32Status.errCount++;
+        }
+      }
+    }
+    else
+    {
+      /* 连接断开，尝试重连 */
+      strncpy(g_mqttStatus.state, "OFFLINE", sizeof(g_mqttStatus.state));
+      strncpy(g_mqttData.inverter.state, "STOP", sizeof(g_mqttData.inverter.state));
+
+      /* 尝试重新初始化ESP32 */
+      if (ESP32_Init())
+      {
+        strncpy(g_mqttStatus.state, "ONLINE", sizeof(g_mqttStatus.state));
+        dataSendCount = 0;
+        heartbeatCount = 0;
+      }
+      else
+      {
+        /* 重连失败，延时后再次尝试 */
+        osDelay(5000);
+      }
+    }
+
+    /* 1秒发送一次数据 */
+    osDelay(1000);
   }
+  
   /* USER CODE END WiFiTask */
 }
 
