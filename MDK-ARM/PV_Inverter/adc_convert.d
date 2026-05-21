@@ -43,5 +43,6 @@ pv_inverter\adc_convert.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim
 pv_inverter\adc_convert.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 pv_inverter\adc_convert.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 pv_inverter\adc_convert.o: ../Core/Inc/dma.h
+pv_inverter\adc_convert.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
 pv_inverter\adc_convert.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\math.h
 pv_inverter\adc_convert.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\string.h

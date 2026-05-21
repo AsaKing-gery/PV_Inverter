@@ -130,7 +130,7 @@ static uint16_t Touch_ReadAD(uint8_t cmd)
     HAL_SPI_TransmitReceive(&TOUCH_SPI, txData, rxData, 3, 100);
     
     /* CS拉高 */
-    HAL_GPIO_WritePin(TOUCH_CS_PORT, TOUCH_CS_PIN, GPIO_SET);
+    HAL_GPIO_WritePin(TOUCH_CS_PORT, TOUCH_CS_PIN, GPIO_PIN_SET);
     
     /* 提取12位结果 */
     result = ((rxData[1] << 8) | rxData[2]) >> 3;

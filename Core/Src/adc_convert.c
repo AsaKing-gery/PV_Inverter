@@ -24,6 +24,7 @@
 #include "data.h"
 #include "adc.h"
 #include "dma.h"
+#include "cmsis_os2.h"
 #include <math.h>
 #include <string.h>
 
