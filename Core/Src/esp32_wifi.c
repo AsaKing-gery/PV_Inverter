@@ -55,7 +55,25 @@ ESP32_Status_t g_esp32Status;
 /* UART句柄 - 由CubeMX生成 */
 extern UART_HandleTypeDef huart5;  /* 使用UART5连接ESP32-C3 */
 
-/* 接收缓冲区 */
+/* ========== 环形缓冲区定义 ========== */
+#define RING_BUFFER_SIZE    1024    /* 环形缓冲区大小 */
+#define RING_BUFFER_MASK    (RING_BUFFER_SIZE - 1)
+
+typedef struct {
+    uint8_t buffer[RING_BUFFER_SIZE];
+    volatile uint16_t head;         /* 写入位置 */
+    volatile uint16_t tail;         /* 读取位置 */
+    volatile uint16_t count;        /* 当前数据量 */
+} RingBuffer_t;
+
+static RingBuffer_t rxRingBuffer;   /* 接收环形缓冲区 */
+static volatile uint8_t rxLineComplete = 0;  /* 行接收完成标志 */
+
+/* 行缓冲区 - 用于提取完整行 */
+static uint8_t lineBuffer[AT_RSP_BUFFER_SIZE];
+static volatile uint16_t lineIndex = 0;
+
+/* 旧缓冲区兼容 (逐步替换) */
 static uint8_t rxBuffer[AT_RSP_BUFFER_SIZE];
 static volatile uint16_t rxIndex = 0;
 static volatile uint8_t rxComplete = 0;
@@ -77,6 +95,93 @@ static bool ESP32_SendATWithRetry(const char* cmd, const char* expected, uint32_
 
 /* USER CODE BEGIN 0 */
 
+/**
+  * @brief  初始化环形缓冲区
+  */
+static void RingBuffer_Init(RingBuffer_t* rb)
+{
+  memset(rb->buffer, 0, sizeof(rb->buffer));
+  rb->head = 0;
+  rb->tail = 0;
+  rb->count = 0;
+}
+
+/**
+  * @brief  写入一个字节到环形缓冲区
+  * @retval 0:成功, 1:缓冲区满
+  */
+static uint8_t RingBuffer_Write(RingBuffer_t* rb, uint8_t data)
+{
+  if (rb->count >= RING_BUFFER_SIZE)
+  {
+    return 1;  /* 缓冲区满 */
+  }
+  
+  rb->buffer[rb->head] = data;
+  rb->head = (rb->head + 1) & RING_BUFFER_MASK;
+  rb->count++;
+  
+  return 0;
+}
+
+/**
+  * @brief  从环形缓冲区读取一个字节
+  * @retval 0:成功, 1:缓冲区空
+  */
+static uint8_t RingBuffer_Read(RingBuffer_t* rb, uint8_t* data)
+{
+  if (rb->count == 0)
+  {
+    return 1;  /* 缓冲区空 */
+  }
+  
+  *data = rb->buffer[rb->tail];
+  rb->tail = (rb->tail + 1) & RING_BUFFER_MASK;
+  rb->count--;
+  
+  return 0;
+}
+
+/**
+  * @brief  获取环形缓冲区当前数据量
+  */
+static uint16_t RingBuffer_Count(RingBuffer_t* rb)
+{
+  return rb->count;
+}
+
+/**
+  * @brief  从环形缓冲区提取一行数据 (以\n结尾)
+  * @retval 0:未找到完整行, >0:行长度
+  */
+static uint16_t RingBuffer_GetLine(RingBuffer_t* rb, uint8_t* line, uint16_t maxLen)
+{
+  uint16_t i;
+  uint16_t count = rb->count;
+  uint16_t tempTail = rb->tail;
+  
+  /* 查找\n */
+  for (i = 0; i < count && i < maxLen - 1; i++)
+  {
+    uint8_t ch = rb->buffer[tempTail];
+    tempTail = (tempTail + 1) & RING_BUFFER_MASK;
+    
+    if (ch == '\n')
+    {
+      /* 找到行尾，提取数据 */
+      uint16_t lineLen = i + 1;
+      for (uint16_t j = 0; j < lineLen; j++)
+      {
+        RingBuffer_Read(rb, &line[j]);
+      }
+      line[lineLen] = '\0';  /* 添加字符串结束符 */
+      return lineLen;
+    }
+  }
+  
+  return 0;  /* 未找到完整行 */
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -89,6 +194,11 @@ static void ESP32_ClearRxBuffer(void)
   rxIndex = 0;
   rxComplete = 0;
   memset(rxBuffer, 0, sizeof(rxBuffer));
+  
+  /* 同时清除环形缓冲区 */
+  RingBuffer_Init(&rxRingBuffer);
+  lineIndex = 0;
+  rxLineComplete = 0;
 }
 
 /**
@@ -191,6 +301,14 @@ bool ESP32_SendATCommand(const char* cmd, const char* expectedRsp, uint32_t time
 bool ESP32_Init(void)
 {
   g_esp32Status.state = ESP32_STATE_INIT;
+  
+  /* 初始化环形缓冲区 */
+  RingBuffer_Init(&rxRingBuffer);
+  lineIndex = 0;
+  rxLineComplete = 0;
+  
+  /* 启动UART接收中断 */
+  HAL_UART_Receive_IT(&huart5, (uint8_t*)&huart5.Instance->DR, 1);
   
   /* 第1步：等待ESP32启动 (2-3秒) */
   HAL_Delay(ESP32_BOOT_DELAY_MS);
@@ -409,19 +527,86 @@ bool ESP32_SendHeartbeat(void)
 }
 
 /**
-  * @brief  处理接收到的数据
+  * @brief  从环形缓冲区读取一行数据
+  * @param  line: 行缓冲区
+  * @param  maxLen: 最大长度
+  * @param  timeoutMs: 超时时间
+  * @retval >0: 读取到的长度, 0: 超时无数据
+  * @note   使用环形缓冲区，非阻塞读取
+  */
+uint16_t ESP32_ReadLine(uint8_t* line, uint16_t maxLen, uint32_t timeoutMs)
+{
+  uint32_t tickStart = HAL_GetTick();
+  
+  while (1)
+  {
+    /* 尝试从环形缓冲区提取一行 */
+    uint16_t len = RingBuffer_GetLine(&rxRingBuffer, line, maxLen);
+    if (len > 0)
+    {
+      return len;
+    }
+    
+    /* 检查超时 */
+    if (HAL_GetTick() - tickStart >= timeoutMs)
+    {
+      return 0;
+    }
+    
+    /* 短暂延时，让出CPU */
+    osDelay(1);
+  }
+}
+
+/**
+  * @brief  检查环形缓冲区是否有完整行
+  * @retval true: 有完整行, false: 无
+  */
+bool ESP32_HasLine(void)
+{
+  uint16_t count = RingBuffer_Count(&rxRingBuffer);
+  uint16_t tempTail = rxRingBuffer.tail;
+  
+  for (uint16_t i = 0; i < count; i++)
+  {
+    if (rxRingBuffer.buffer[tempTail] == '\n')
+    {
+      return true;
+    }
+    tempTail = (tempTail + 1) & RING_BUFFER_MASK;
+  }
+  
+  return false;
+}
+
+/**
+  * @brief  处理接收到的数据 - 环形缓冲区版本
   * @param  None
   * @retval None
+  * @note   在主循环中调用，使用环形缓冲区处理MQTT消息
   */
 void ESP32_ProcessRxData(void)
 {
-  /* 处理接收到的MQTT消息 */
-  if (strstr((char*)rxBuffer, "+MQTTSUBRECV") != NULL)
+  uint8_t tempLine[256];
+  
+  /* 处理环形缓冲区中的所有完整行 */
+  while (ESP32_HasLine())
   {
-    /* 解析接收到的消息 */
-    /* TODO: 实现消息解析和命令处理 */
+    if (ESP32_ReadLine(tempLine, sizeof(tempLine), 0) > 0)
+    {
+      /* 处理接收到的MQTT消息 */
+      if (strstr((char*)tempLine, "+MQTTSUBRECV") != NULL)
+      {
+        /* 解析接收到的消息 */
+        /* TODO: 实现消息解析和命令处理 */
+      }
+      
+      /* 可以在这里添加其他消息处理 */
+      /* 例如: +MQTTCONN, +MQTTPUB等 */
+    }
   }
   
+  /* 兼容旧代码 - 清除旧缓冲区 */
   ESP32_ClearRxBuffer();
 }
 
@@ -571,19 +756,38 @@ bool ESP32_SendDataFrame(void)
 }
 
 /**
-  * @brief  UART接收中断回调
-  * @param  huart: UART句柄、
+  * @brief  UART接收中断回调 - 环形缓冲区版本
+  * @param  huart: UART句柄
   * @retval None
+  * @note   将接收到的字节写入环形缓冲区
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   if (huart == &huart5)
   {
-    /* 接收完成处理 */
-    rxComplete = 1;
-
-    /* 重新启动接收 */
-    HAL_UART_Receive_IT(&huart5, &rxBuffer[rxIndex], 1);
+    /* 读取接收到的字节 */
+    uint8_t rxByte = (uint8_t)(huart->Instance->DR & 0xFF);
+    
+    /* 写入环形缓冲区 */
+    if (RingBuffer_Write(&rxRingBuffer, rxByte) == 0)
+    {
+      /* 同时写入旧缓冲区兼容 */
+      if (rxIndex < AT_RSP_BUFFER_SIZE - 1)
+      {
+        rxBuffer[rxIndex++] = rxByte;
+        rxBuffer[rxIndex] = '\0';
+      }
+      
+      /* 检查是否接收到完整行 (以\n结尾) */
+      if (rxByte == '\n')
+      {
+        rxLineComplete = 1;
+        rxComplete = 1;  /* 兼容旧代码 */
+      }
+    }
+    
+    /* 重新启动接收 - 继续接收下一个字节 */
+    HAL_UART_Receive_IT(&huart5, (uint8_t*)&huart->Instance->DR, 1);
   }
 }
 
