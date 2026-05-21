@@ -34,8 +34,13 @@
 #include "esp32_wifi.h"
 #include "rs485_modbus.h"
 #include "data.h"
+#include "display.h"
+#include "display_ui.h"
 #include <string.h>
 #include <stdio.h>
+
+/* 看门狗句柄声明 (在main.c中定义) */
+extern IWDG_HandleTypeDef hiwdg;
 
 /* USER CODE END Includes */
 
@@ -107,7 +112,7 @@ const osThreadAttr_t rs485Task_attributes = {
 
 const osThreadAttr_t hmiTask_attributes = {
   .name = "hmiTask",
-  .stack_size = 512 * 4,
+  .stack_size = 2048 * 4,  /* LVGL需要较大堆栈 */
   .priority = (osPriority_t) osPriorityBelowNormal,
 };
 
@@ -367,24 +372,24 @@ void ControlTask(void *argument)
       g_mqttData.ac.voltage = acVoltage;
       g_mqttData.ac.current = acCurrent;
       g_mqttData.ac.power = acPower;
-      g_mqttData.ac.freq = PLL_GetFrequency();
+      g_mqttData.ac.frequency = PLL_GetFrequency();
       
-      /* 温度数据 */
-      g_mqttData.temp.front = tempFront;
-      g_mqttData.temp.rear = tempRear;
+      /* 温度数据 (使用mosfet_front/mosfet_rear字段) */
+      g_mqttData.temp.mosfet_front = tempFront;
+      g_mqttData.temp.mosfet_rear = tempRear;
       
       /* MPPT数据 */
       g_mqttData.mppt.duty = MPPT_GetDuty();
       g_mqttData.mppt.efficiency = MPPT_GetEfficiency();
       
-      /* 逆变器状态 */
+      /* 逆变器状态 (使用state字段，非syncState) */
       if (PLL_IsLocked())
       {
-        strncpy(g_mqttData.inverter.syncState, "SYNCED", sizeof(g_mqttData.inverter.syncState));
+        strncpy(g_mqttData.inverter.state, "RUN", sizeof(g_mqttData.inverter.state));
       }
       else
       {
-        strncpy(g_mqttData.inverter.syncState, "UNSYNC", sizeof(g_mqttData.inverter.syncState));
+        strncpy(g_mqttData.inverter.state, "STOP", sizeof(g_mqttData.inverter.state));
       }
       
       /* 保护状态已在Protection模块中更新 */
@@ -557,12 +562,48 @@ void RS485Task(void *argument)
 void HMITask(void *argument)
 {
   /* USER CODE BEGIN HMITask */
+  
+  /* 初始化显示系统和LVGL */
+  Display_Init();
+  DisplayUI_Init();
+  
+  /* 主循环 - 人机交互任务 */
+  uint32_t lastUpdateTick = 0;
+  
   for (;;)
   {
-    /* 人机交互界面处理 */
+    /* 1. 处理LVGL内部定时器（动画、刷新） */
+    lv_timer_handler();
     
-    osDelay(50);
+    /* 2. 每500ms更新界面数据 */
+    uint32_t currentTick = osKernelGetTickCount();
+    if (currentTick - lastUpdateTick >= 500)
+    {
+      lastUpdateTick = currentTick;
+      
+      /* 获取g_mqttData最新值（使用互斥量保护） */
+      osMutexAcquire(globalDataMutex, osWaitForever);
+      {
+        /* 更新光伏电压/电流/功率显示 */
+        /* 更新交流输出电压/频率/功率显示 */
+        /* 更新MPPT状态指示 */
+        /* 更新运行模式（离网/并网） */
+        /* 更新温度显示 */
+        
+        /* 通过LVGL更新UI */
+        DisplayUI_UpdateFromMQTT(&g_mqttData);
+      }
+      osMutexRelease(globalDataMutex);
+    }
+    
+    /* 3. 处理触摸屏输入事件 */
+    /* SPI2读取XPT2046坐标 - 在lv_timer_handler中自动处理 */
+    /* LVGL输入设备驱动处理 - 已注册在Display_Init中 */
+    
+    /* 周期5ms运行 */
+    osDelay(5);
   }
+  
   /* USER CODE END HMITask */
 }
 
@@ -590,14 +631,34 @@ void KeyTask(void *argument)
   * @brief  监控任务 - 最低优先级
   * @param  argument: 任务参数
   * @retval None
+  * @note   触发方式：周期100ms运行
+  *         主循环逻辑：
+  *         - 调用HAL_IWDG_Refresh()喂狗，防止看门狗复位
+  *         - 可选：系统状态监控、任务运行时间统计等
   */
 void MonitorTask(void *argument)
 {
   /* USER CODE BEGIN MonitorTask */
+  
+  /* 初始化看门狗（如已在main.c初始化则跳过） */
+  /* HAL_IWDG_Init(&hiwdg); */
+  
   for (;;)
   {
-    /* 系统监控、看门狗喂狗等 */
+    /* 1. 喂狗操作 - 防止看门狗复位 */
+    /* 假设看门狗超时时间 > 100ms (通常设置为500ms-1s) */
+    HAL_IWDG_Refresh(&hiwdg);
     
+    /* 2. 可选：系统状态监控 */
+    /* - 检查任务运行状态 */
+    /* - 记录系统运行时间 */
+    /* - 检测死锁或任务阻塞 */
+    
+    /* 3. 可选：低优先级后台任务 */
+    /* - 日志缓冲刷新 */
+    /* - 非关键数据统计 */
+    
+    /* 周期100ms运行 */
     osDelay(100);
   }
   /* USER CODE END MonitorTask */
