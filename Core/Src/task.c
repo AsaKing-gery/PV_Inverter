@@ -274,7 +274,7 @@ static void Init_AllModules(void)
   Protection_Init();
   
   /* 5. 通信模块初始化 */
-  ESP32_Init();              /* WiFi模块 */
+  /* ESP32在WiFiTask中异步初始化，避免长时间阻塞 */
   Modbus_Init();             /* RS485 Modbus */
   
   /* 6. 显示系统初始化 */

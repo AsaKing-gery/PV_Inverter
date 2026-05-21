@@ -244,9 +244,9 @@ static bool ESP32_WaitForResponse(const char* expected, uint32_t timeoutMs)
       }
     }
     
-    HAL_Delay(10);
+    osDelay(10);
   }
-  
+
   return false;  /* 超时 */
 }
 
@@ -275,7 +275,7 @@ static bool ESP32_SendATWithRetry(const char* cmd, const char* expected, uint32_
     }
     
     /* 重试前延时 */
-    HAL_Delay(100);
+    osDelay(100);
   }
   
   g_esp32Status.errCount++;
@@ -312,7 +312,7 @@ bool ESP32_Init(void)
   HAL_UART_Receive_IT(&huart5, (uint8_t*)&huart5.Instance->DR, 1);
   
   /* 第1步：等待ESP32启动 (2-3秒) */
-  HAL_Delay(ESP32_BOOT_DELAY_MS);
+  osDelay(ESP32_BOOT_DELAY_MS);
   
   /* 第2步：发送AT测试命令 */
   if (!ESP32_SendATCommand("AT", "OK", AT_CMD_TIMEOUT_MS))
@@ -619,7 +619,7 @@ void ESP32_ProcessRxData(void)
 void ESP32_Reset(void)
 {
   ESP32_SendATCommand("AT+RST", "OK", AT_CMD_TIMEOUT_MS);
-  HAL_Delay(ESP32_BOOT_DELAY_MS);
+  osDelay(ESP32_BOOT_DELAY_MS);
 }
 
 /* USER CODE BEGIN 1 */
