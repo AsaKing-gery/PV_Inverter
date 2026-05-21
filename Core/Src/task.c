@@ -253,9 +253,40 @@ static void Create_AllTasks(void)
 }
 
 /**
+  * @brief  模块初始化函数
+  * @note   集中初始化所有应用模块
+  * @retval None
+  */
+static void Init_AllModules(void)
+{
+  /* 1. 数据管理初始化 */
+  Data_Init();
+  
+  /* 2. ADC采集初始化 */
+  ADC_DMA_Start();           /* 启动ADC DMA采集 */
+  
+  /* 3. 控制算法初始化 */
+  MPPT_Init();               /* MPPT算法 */
+  SPWM_Init();               /* SPWM生成 */
+  PLL_Init();                /* 锁相环 */
+  
+  /* 4. 保护系统初始化 */
+  Protection_Init();
+  
+  /* 5. 通信模块初始化 */
+  ESP32_Init();              /* WiFi模块 */
+  Modbus_Init();             /* RS485 Modbus */
+  
+  /* 6. 显示系统初始化 */
+  Display_Init();            /* LCD+LVGL */
+  DisplayUI_Init();          /* UI界面 */
+}
+
+/**
   * @brief  初始化任务函数
   * @param  argument: 任务参数
   * @retval None
+  * @note   系统启动入口，完成所有初始化和任务创建
   */
 void InitTask(void *argument)
 {
@@ -264,10 +295,16 @@ void InitTask(void *argument)
   /* 第1步：创建同步对象（信号量、互斥量、队列） */
   Create_SyncObjects();
   
-  /* 第2步：创建所有应用任务 */
+  /* 第2步：初始化所有应用模块 */
+  Init_AllModules();
+  
+  /* 第3步：创建所有应用任务 */
   Create_AllTasks();
   
-  /* 第3步：初始化完成后删除自身 */
+  /* 第4步：启动SPWM输出（必须在任务创建后） */
+  SPWM_Start();
+  
+  /* 第5步：初始化完成后删除自身 */
   osThreadTerminate(initTaskHandle);
   
   /* USER CODE END InitTask */
@@ -290,15 +327,7 @@ void ControlTask(void *argument)
 {
   /* USER CODE BEGIN ControlTask */
   
-  /* 初始化各模块 */
-  ADC_DMA_Start();           /* 启动ADC DMA采集 */
-  MPPT_Init();               /* 初始化MPPT */
-  SPWM_Init();               /* 初始化SPWM */
-  PLL_Init();                /* 初始化锁相环 */
-  Protection_Init();         /* 初始化保护系统 */
-  
-  /* 启动SPWM输出 */
-  SPWM_Start();
+  /* 注意：所有模块已在InitTask中初始化 */
   
   /* 任务周期计数 */
   uint32_t cycleCount = 0;
@@ -417,31 +446,21 @@ void WiFiTask(void *argument)
 {
   /* USER CODE BEGIN WiFiTask */
   
+  /* 注意：ESP32已在InitTask中初始化，这里检查连接状态 */
+  
   /* 等待系统稳定 */
   osDelay(1000);
   
-  /* 初始化ESP32模块 (只执行一次) */
-  bool initSuccess = false;
-  for (uint8_t retry = 0; retry < 3; retry++)
-  {
-    if (ESP32_Init())
-    {
-      initSuccess = true;
-      break;
-    }
-    osDelay(5000);  /* 失败后等待5秒重试 */
-  }
-  
-  if (!initSuccess)
-  {
-    /* 初始化失败，记录错误 */
-    strncpy(g_mqttStatus.state, "ERROR", sizeof(g_mqttStatus.state));
-    strncpy(g_mqttStatus.fw_version, "INIT_FAIL", sizeof(g_mqttStatus.fw_version));
-  }
-  else
+  /* 检查ESP32连接状态 */
+  if (ESP32_IsMQTTConnected())
   {
     strncpy(g_mqttStatus.state, "ONLINE", sizeof(g_mqttStatus.state));
     strncpy(g_mqttStatus.fw_version, "V1.0.0", sizeof(g_mqttStatus.fw_version));
+  }
+  else
+  {
+    /* 连接未建立，记录状态 */
+    strncpy(g_mqttStatus.state, "OFFLINE", sizeof(g_mqttStatus.state));
   }
   
   /* 主循环 - 周期性发送数据 */
@@ -524,8 +543,7 @@ void RS485Task(void *argument)
 {
   /* USER CODE BEGIN RS485Task */
   
-  /* 初始化Modbus从机 */
-  Modbus_Init();
+  /* 注意：Modbus已在InitTask中初始化 */
   
   /* 主循环 - 快速响应Modbus请求 */
   for (;;)
@@ -561,9 +579,7 @@ void HMITask(void *argument)
 {
   /* USER CODE BEGIN HMITask */
   
-  /* 初始化显示系统和LVGL */
-  Display_Init();
-  DisplayUI_Init();
+  /* 注意：显示系统已在InitTask中初始化 */
   
   /* 主循环 - 人机交互任务 */
   uint32_t lastUpdateTick = 0;
