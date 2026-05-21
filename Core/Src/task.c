@@ -32,6 +32,7 @@
 #include "pll_sogi.h"
 #include "protection.h"
 #include "esp32_wifi.h"
+#include "rs485_modbus.h"
 #include "data.h"
 #include <string.h>
 #include <stdio.h>
@@ -510,19 +511,41 @@ void WiFiTask(void *argument)
 }
 
 /**
-  * @brief  RS-485 Modbus通信任务
+  * @brief  RS-485 Modbus任务
   * @param  argument: 任务参数
   * @retval None
+  * @note   SunSpec协议支持，功能码03/06
+  *         从g_mqttData同步数据到Modbus寄存器
   */
 void RS485Task(void *argument)
 {
   /* USER CODE BEGIN RS485Task */
+  
+  /* 初始化Modbus从机 */
+  Modbus_Init();
+  
+  /* 主循环 - 快速响应Modbus请求 */
   for (;;)
   {
-    /* RS-485 Modbus通信处理 */
+    /* 处理Modbus请求 (帧结束检测 + 响应发送) */
+    /* 注意：数据接收在中断中完成，这里只处理完整的帧 */
+    Modbus_Process();
     
+    /* 每100ms更新一次寄存器数据 */
+    static uint32_t lastUpdateTick = 0;
+    uint32_t currentTick = osKernelGetTickCount();
+    if (currentTick - lastUpdateTick >= 100)
+    {
+      lastUpdateTick = currentTick;
+      
+      /* 从g_mqttData同步到Modbus寄存器 */
+      Modbus_UpdateRegisters();
+    }
+    
+    /* 10ms周期 - 快速响应 */
     osDelay(10);
   }
+  
   /* USER CODE END RS485Task */
 }
 
