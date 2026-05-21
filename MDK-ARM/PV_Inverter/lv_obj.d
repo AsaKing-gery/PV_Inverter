@@ -72,6 +72,7 @@ pv_inverter\lv_obj.o: ../Middlewares/Third_Party/lvgl/src/core/../extra/libs/png
 pv_inverter\lv_obj.o: ../Middlewares/Third_Party/lvgl/src/core/../extra/libs/gif/lv_gif.h
 pv_inverter\lv_obj.o: ../Middlewares/Third_Party/lvgl/src/core/../extra/libs/gif/../../../lvgl.h
 pv_inverter\lv_obj.o: ../Middlewares/Third_Party/lvgl/src/core/../extra/libs/gif/../../../../lvgl.h
+pv_inverter\lv_obj.o: ../Middlewares/Third_Party/lvgl/src/core/../extra/libs/gif/../../../../src/font/lv_font_fmt_txt.h
 pv_inverter\lv_obj.o: ../Middlewares/Third_Party/lvgl/src/core/../extra/libs/gif/../../../../src/widgets/lv_arc.h
 pv_inverter\lv_obj.o: ../Middlewares/Third_Party/lvgl/src/core/../extra/libs/gif/../../../../src/widgets/lv_bar.h
 pv_inverter\lv_obj.o: ../Middlewares/Third_Party/lvgl/src/core/../extra/libs/gif/../../../../src/widgets/lv_btn.h

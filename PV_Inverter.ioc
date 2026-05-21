@@ -441,3 +441,4 @@ VP_IWDG_VS_IWDG.Signal=IWDG_VS_IWDG
 VP_SYS_VS_tim6.Mode=TIM6
 VP_SYS_VS_tim6.Signal=SYS_VS_tim6
 board=custom
+rtos.0.ip=FREERTOS

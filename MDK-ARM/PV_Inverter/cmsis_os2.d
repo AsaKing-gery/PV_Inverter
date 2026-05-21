@@ -12,11 +12,10 @@ pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/port
 pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
 pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
 pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
-pv_inverter\cmsis_os2.o: ../Core/Inc/task.h
-pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
-pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
 pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
 pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
 pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 pv_inverter\cmsis_os2.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/freertos_mpool.h

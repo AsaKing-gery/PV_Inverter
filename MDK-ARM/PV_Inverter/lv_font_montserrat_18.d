@@ -61,6 +61,7 @@ pv_inverter\lv_font_montserrat_18.o: ../Middlewares/Third_Party/lvgl/src/font/..
 pv_inverter\lv_font_montserrat_18.o: ../Middlewares/Third_Party/lvgl/src/font/../../src/core/lv_disp.h
 pv_inverter\lv_font_montserrat_18.o: ../Middlewares/Third_Party/lvgl/src/font/../../src/core/lv_theme.h
 pv_inverter\lv_font_montserrat_18.o: ../Middlewares/Third_Party/lvgl/src/font/../../src/core/lv_refr.h
+pv_inverter\lv_font_montserrat_18.o: ../Middlewares/Third_Party/lvgl/src/font/../../src/font/lv_font_fmt_txt.h
 pv_inverter\lv_font_montserrat_18.o: ../Middlewares/Third_Party/lvgl/src/font/../../src/widgets/lv_arc.h
 pv_inverter\lv_font_montserrat_18.o: ../Middlewares/Third_Party/lvgl/src/font/../../src/widgets/lv_bar.h
 pv_inverter\lv_font_montserrat_18.o: ../Middlewares/Third_Party/lvgl/src/font/../../src/widgets/lv_btn.h

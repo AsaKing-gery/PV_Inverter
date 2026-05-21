@@ -28,6 +28,7 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
 #include <stdbool.h>
+#include "stm32f4xx_hal.h"
 
 /* Exported defines ----------------------------------------------------------*/
 /* USER CODE BEGIN ED */
@@ -203,6 +204,14 @@ bool ESP32_IsMQTTConnected(void);
   * @retval true: 成功, false: 失败
   */
 bool ESP32_SendHeartbeat(void);
+
+/**
+  * @brief  ESP32 UART接收中断处理
+  * @param  huart: UART句柄
+  * @retval None
+  * @note   由HAL_UART_RxCpltCallback调用
+  */
+void ESP32_UART_RxHandler(UART_HandleTypeDef *huart);
 
 /**
   * @brief  处理接收到的数据

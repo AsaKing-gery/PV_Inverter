@@ -2,8 +2,6 @@ pv_inverter\esp32_wifi.o: ../Core/Src/esp32_wifi.c
 pv_inverter\esp32_wifi.o: ../Core/Inc/esp32_wifi.h
 pv_inverter\esp32_wifi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
 pv_inverter\esp32_wifi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdbool.h
-pv_inverter\esp32_wifi.o: ../Core/Inc/usart.h
-pv_inverter\esp32_wifi.o: ../Core/Inc/main.h
 pv_inverter\esp32_wifi.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 pv_inverter\esp32_wifi.o: ../Core/Inc/stm32f4xx_hal_conf.h
 pv_inverter\esp32_wifi.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
@@ -41,7 +39,10 @@ pv_inverter\esp32_wifi.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.
 pv_inverter\esp32_wifi.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 pv_inverter\esp32_wifi.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 pv_inverter\esp32_wifi.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+pv_inverter\esp32_wifi.o: ../Core/Inc/usart.h
+pv_inverter\esp32_wifi.o: ../Core/Inc/main.h
 pv_inverter\esp32_wifi.o: ../Core/Inc/data.h
 pv_inverter\esp32_wifi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\string.h
 pv_inverter\esp32_wifi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdio.h
 pv_inverter\esp32_wifi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdarg.h
+pv_inverter\esp32_wifi.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h

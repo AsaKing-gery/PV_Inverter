@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "FreeRTOS.h"
-#include "task.h"
+#include "app_task.h"
 #include "cmsis_os.h"
 #include "main.h"
 
@@ -342,15 +342,15 @@ void ControlTask(void *argument)
     uint16_t rawAC_V = ADC_GetRawValue(ADC_IDX_AC_VOLTAGE);
     uint16_t rawTEMP_F = ADC_GetRawValue(ADC_IDX_TEMP_FRONT);
     uint16_t rawTEMP_R = ADC_GetRawValue(ADC_IDX_TEMP_REAR);
-    
-    /* ========== 2. 还原物理量 ========== */
-    float pvVoltage = ADC_ConvertPVVoltage(rawPV_V);
-    float pvCurrent = ADC_ConvertPVCurrent(rawPV_I);
-    float busVoltage = ADC_ConvertBusVoltage(rawBUS_V);
-    float acCurrent = ADC_ConvertACCurrent(rawAC_I);
-    float acVoltage = ADC_ConvertACVoltage(rawAC_V);
-    float tempFront = ADC_ConvertTemperature(rawTEMP_F);
-    float tempRear = ADC_ConvertTemperature(rawTEMP_R);
+
+    /* ========== 2. 还原物理量 (raw→校准→低通滤波) ========== */
+    float pvVoltage = ADC_GetPVVoltage(rawPV_V);
+    float pvCurrent = ADC_GetPVCurrent(rawPV_I);
+    float busVoltage = ADC_GetBusVoltage(rawBUS_V);
+    float acCurrent = ADC_GetACCurrent(rawAC_I);
+    float acVoltage = ADC_GetACVoltage_RMS(rawAC_V);
+    float tempFront = ADC_GetFrontTemperature(rawTEMP_F);
+    float tempRear = ADC_GetRearTemperature(rawTEMP_R);
     
     /* 计算功率 */
     float pvPower = pvVoltage * pvCurrent;

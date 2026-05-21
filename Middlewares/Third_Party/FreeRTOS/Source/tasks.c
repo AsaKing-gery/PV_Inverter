@@ -5307,4 +5307,14 @@ when performing module tests). */
 
 #endif
 
-
+// 调试专用：导出内核全局变量的指针
+    volatile UBaseType_t * const puxCurrentNumberOfTasks = &uxCurrentNumberOfTasks;
+    volatile TickType_t * const pxTickCount = &xTickCount;
+    volatile UBaseType_t * const puxTopReadyPriority = &uxTopReadyPriority;
+    volatile BaseType_t * const pxSchedulerRunning = &xSchedulerRunning;
+    volatile TickType_t * const pxPendedTicks = &xPendedTicks;
+    volatile BaseType_t * const pxYieldPending = &xYieldPending;
+    volatile BaseType_t * const pxNumOfOverflows = &xNumOfOverflows;
+    UBaseType_t * const puxTaskNumber = &uxTaskNumber;
+    volatile TickType_t * const pxNextTaskUnblockTime = &xNextTaskUnblockTime;
+    TaskHandle_t * const pxIdleTaskHandle = &xIdleTaskHandle;

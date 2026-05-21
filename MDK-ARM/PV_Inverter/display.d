@@ -99,6 +99,7 @@ pv_inverter\display.o: ../Middlewares/Third_Party/lvgl/src/core/lv_indev.h
 pv_inverter\display.o: ../Middlewares/Third_Party/lvgl/src/core/lv_disp.h
 pv_inverter\display.o: ../Middlewares/Third_Party/lvgl/src/core/lv_theme.h
 pv_inverter\display.o: ../Middlewares/Third_Party/lvgl/src/core/lv_refr.h
+pv_inverter\display.o: ../Middlewares/Third_Party/lvgl/src/font/lv_font_fmt_txt.h
 pv_inverter\display.o: ../Middlewares/Third_Party/lvgl/src/widgets/lv_arc.h
 pv_inverter\display.o: ../Middlewares/Third_Party/lvgl/src/widgets/lv_bar.h
 pv_inverter\display.o: ../Middlewares/Third_Party/lvgl/src/widgets/lv_btn.h

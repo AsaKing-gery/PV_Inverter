@@ -143,7 +143,7 @@ static void CreateHomePage(lv_obj_t* parent)
     lv_obj_set_style_pad_all(page_home, UI_PADDING, 0);
     lv_obj_set_flex_flow(page_home, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_align(page_home, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
-    lv_obj_set_style_gap(page_home, UI_GAP, 0);
+    lv_obj_set_style_pad_gap(page_home, UI_GAP, 0);
     
     /* 设备信息卡片 */
     lv_obj_t* card_info = lv_obj_create(page_home);
@@ -218,7 +218,7 @@ static void CreateHomePage(lv_obj_t* parent)
     lv_obj_set_style_pad_all(grid, 0, 0);
     lv_obj_set_flex_flow(grid, LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_flex_align(grid, LV_FLEX_ALIGN_SPACE_BETWEEN, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
-    lv_obj_set_style_gap(grid, 8, 0);
+    lv_obj_set_style_pad_gap(grid, 8, 0);
     lv_obj_clear_flag(grid, LV_OBJ_FLAG_SCROLLABLE);
     
     /* 6个参数卡片 */
@@ -327,7 +327,7 @@ static void CreateDetailPage(lv_obj_t* parent)
     lv_obj_set_style_pad_all(page_detail, UI_PADDING, 0);
     lv_obj_set_flex_flow(page_detail, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_align(page_detail, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
-    lv_obj_set_style_gap(page_detail, UI_GAP, 0);
+    lv_obj_set_style_pad_gap(page_detail, UI_GAP, 0);
     lv_obj_add_flag(page_detail, LV_OBJ_FLAG_HIDDEN);  /* 初始隐藏 */
     
     /* 在线状态提示 */
@@ -402,7 +402,7 @@ static void CreateDetailPage(lv_obj_t* parent)
 static void NavBtnEventHandler(lv_event_t* e)
 {
     lv_obj_t* btn = lv_event_get_target(e);
-    UI_Page_t page = (UI_Page_t)lv_obj_get_user_data(btn);
+    UI_Page_t page = (UI_Page_t)(intptr_t)lv_obj_get_user_data(btn);
     
     DisplayUI_SwitchPage(page);
 }

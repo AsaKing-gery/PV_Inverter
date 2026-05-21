@@ -186,53 +186,60 @@ float ADC_GetChannelVoltage(ADC_Index_t index);
 
 /**
   * @brief  获取光伏输入电压
+  * @param  raw: ADC原始值 (0-4095)
   * @retval 光伏电压 (V), 范围 0-36.3V
   * @note   硬件: PA0, 分压比 11
   */
-float ADC_GetPVVoltage(void);
+float ADC_GetPVVoltage(uint16_t raw);
 
 /**
   * @brief  获取直流母线电压
+  * @param  raw: ADC原始值 (0-4095)
   * @retval 母线电压 (V), 范围 0-36.3V
   * @note   硬件: PA2, 分压比 11
   */
-float ADC_GetBusVoltage(void);
+float ADC_GetBusVoltage(uint16_t raw);
 
 /**
   * @brief  获取交流输出电压有效值
+  * @param  raw: ADC原始值 (0-4095)
   * @retval 交流电压有效值 (V)
   * @note   硬件: PA4, ZMPT101B
   * @note   使用4个周期的采样数据计算RMS
   */
-float ADC_GetACVoltage_RMS(void);
+float ADC_GetACVoltage_RMS(uint16_t raw);
 
 /**
   * @brief  获取光伏输入电流
+  * @param  raw: ADC原始值 (0-4095)
   * @retval 光伏电流 (A), 范围 ±5A
   * @note   硬件: PA1, ACS712-5A (185mV/A)
   */
-float ADC_GetPVCurrent(void);
+float ADC_GetPVCurrent(uint16_t raw);
 
 /**
   * @brief  获取交流输出电流
+  * @param  raw: ADC原始值 (0-4095)
   * @retval 交流电流 (A), 范围 ±5A
   * @note   硬件: PA3, ACS712-5A (185mV/A)
   */
-float ADC_GetACCurrent(void);
+float ADC_GetACCurrent(uint16_t raw);
 
 /**
   * @brief  获取前级MOSFET温度
+  * @param  raw: ADC原始值 (0-4095)
   * @retval 温度值 (℃), 范围 -40~125℃
   * @note   硬件: PA5, NTC B3950
   */
-float ADC_GetFrontTemperature(void);
+float ADC_GetFrontTemperature(uint16_t raw);
 
 /**
   * @brief  获取后级MOSFET温度
+  * @param  raw: ADC原始值 (0-4095)
   * @retval 温度值 (℃), 范围 -40~125℃
   * @note   硬件: PA6, NTC B3950
   */
-float ADC_GetRearTemperature(void);
+float ADC_GetRearTemperature(uint16_t raw);
 
 /*================== 校准与滤波函数 ==================*/
 

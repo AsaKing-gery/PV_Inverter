@@ -63,6 +63,7 @@ pv_inverter\lv_chart.o: ../Middlewares/Third_Party/lvgl/src/extra/widgets/chart/
 pv_inverter\lv_chart.o: ../Middlewares/Third_Party/lvgl/src/extra/widgets/chart/../../../../src/core/lv_disp.h
 pv_inverter\lv_chart.o: ../Middlewares/Third_Party/lvgl/src/extra/widgets/chart/../../../../src/core/lv_theme.h
 pv_inverter\lv_chart.o: ../Middlewares/Third_Party/lvgl/src/extra/widgets/chart/../../../../src/core/lv_refr.h
+pv_inverter\lv_chart.o: ../Middlewares/Third_Party/lvgl/src/extra/widgets/chart/../../../../src/font/lv_font_fmt_txt.h
 pv_inverter\lv_chart.o: ../Middlewares/Third_Party/lvgl/src/extra/widgets/chart/../../../../src/widgets/lv_arc.h
 pv_inverter\lv_chart.o: ../Middlewares/Third_Party/lvgl/src/extra/widgets/chart/../../../../src/widgets/lv_bar.h
 pv_inverter\lv_chart.o: ../Middlewares/Third_Party/lvgl/src/extra/widgets/chart/../../../../src/widgets/lv_btn.h

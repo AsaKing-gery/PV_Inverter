@@ -84,10 +84,10 @@ typedef struct
 extern SPWM_Controller_t g_spwm;
 
 /**
-  * @brief  正弦表 (256点，Q15格式)
-  * @note   范围: 0-32767 (对应0-1.0)
+  * @brief  正弦表 (256点)
+  * @note   范围: 32768-72757 (16位精度，32位存储)
   */
-extern const uint16_t spwm_sineTable[SPWM_SINE_TABLE_SIZE];
+extern const uint32_t spwm_sineTable[SPWM_SINE_TABLE_SIZE];
 
 /* USER CODE END EV */
 

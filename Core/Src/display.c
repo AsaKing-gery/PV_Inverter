@@ -46,7 +46,7 @@ static int32_t touch_y_scale = 1;
 
 /* Private function prototypes -----------------------------------------------*/
 static void LCD_WriteReg(uint16_t reg, uint16_t data);
-static uint16_t LCD_ReadReg(uint16_t reg);
+//static uint16_t LCD_ReadReg(uint16_t reg);
 static void LCD_SetWindow(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 static void LCD_Flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p);
 static void Touch_Read(lv_indev_drv_t *drv, lv_indev_data_t *data);
@@ -66,11 +66,11 @@ static void LCD_WriteReg(uint16_t reg, uint16_t data)
 /**
   * @brief  读LCD寄存器
   */
-static uint16_t LCD_ReadReg(uint16_t reg)
-{
-    LCD_REG_ADDR = reg;
-    return LCD_DATA_ADDR;
-}
+//static uint16_t LCD_ReadReg(uint16_t reg)
+//{
+//    LCD_REG_ADDR = reg;
+//    return LCD_DATA_ADDR;
+//}
 
 /**
   * @brief  设置LCD窗口

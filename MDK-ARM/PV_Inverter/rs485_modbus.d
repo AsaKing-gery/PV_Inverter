@@ -41,6 +41,7 @@ pv_inverter\rs485_modbus.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sp
 pv_inverter\rs485_modbus.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 pv_inverter\rs485_modbus.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 pv_inverter\rs485_modbus.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+pv_inverter\rs485_modbus.o: ../Core/Inc/esp32_wifi.h
 pv_inverter\rs485_modbus.o: ../Core/Inc/data.h
 pv_inverter\rs485_modbus.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h
 pv_inverter\rs485_modbus.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
@@ -50,7 +51,8 @@ pv_inverter\rs485_modbus.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/p
 pv_inverter\rs485_modbus.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
 pv_inverter\rs485_modbus.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
 pv_inverter\rs485_modbus.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
-pv_inverter\rs485_modbus.o: ../Core/Inc/task.h
+pv_inverter\rs485_modbus.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+pv_inverter\rs485_modbus.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
 pv_inverter\rs485_modbus.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
 pv_inverter\rs485_modbus.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\string.h
 pv_inverter\rs485_modbus.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdio.h

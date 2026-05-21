@@ -8,9 +8,11 @@ pv_inverter\task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.
 pv_inverter\task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
 pv_inverter\task.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
 pv_inverter\task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
-pv_inverter\task.o: ../Core/Inc/task.h
+pv_inverter\task.o: ../Core/Inc/app_task.h
 pv_inverter\task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
 pv_inverter\task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h
+pv_inverter\task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+pv_inverter\task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
 pv_inverter\task.o: ../Core/Inc/main.h
 pv_inverter\task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 pv_inverter\task.o: ../Core/Inc/stm32f4xx_hal_conf.h
@@ -117,6 +119,7 @@ pv_inverter\task.o: ../Middlewares/Third_Party/lvgl/src/core/lv_indev.h
 pv_inverter\task.o: ../Middlewares/Third_Party/lvgl/src/core/lv_disp.h
 pv_inverter\task.o: ../Middlewares/Third_Party/lvgl/src/core/lv_theme.h
 pv_inverter\task.o: ../Middlewares/Third_Party/lvgl/src/core/lv_refr.h
+pv_inverter\task.o: ../Middlewares/Third_Party/lvgl/src/font/lv_font_fmt_txt.h
 pv_inverter\task.o: ../Middlewares/Third_Party/lvgl/src/widgets/lv_arc.h
 pv_inverter\task.o: ../Middlewares/Third_Party/lvgl/src/widgets/lv_bar.h
 pv_inverter\task.o: ../Middlewares/Third_Party/lvgl/src/widgets/lv_btn.h

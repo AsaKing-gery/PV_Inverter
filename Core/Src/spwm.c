@@ -72,11 +72,10 @@ extern TIM_HandleTypeDef htim8;
 SPWM_Controller_t g_spwm;
 
 /**
-  * @brief  正弦表 (256点，Q15格式)
-  * @note   数值范围: 0-32767 (对应正弦值 0-1.0)
-  * @note   索引: 0-255 对应 0-359度
+  * @brief  正弦表 (256点)
+  * @note   范围: 32768-72757 (16位精度，32位存储)
   */
-const uint16_t spwm_sineTable[SPWM_SINE_TABLE_SIZE] = {
+const uint32_t spwm_sineTable[SPWM_SINE_TABLE_SIZE] = {
   32768, 33079, 33390, 33701, 34012, 34322, 34633, 34943,
   35253, 35563, 35872, 36181, 36490, 36798, 37106, 37414,
   37721, 38028, 38334, 38640, 38945, 39250, 39554, 39858,
@@ -116,7 +115,7 @@ const uint16_t spwm_sineTable[SPWM_SINE_TABLE_SIZE] = {
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
 
-static uint16_t SPWM_GetSineValue(uint16_t phase);
+static uint32_t SPWM_GetSineValue(uint16_t phase);
 
 /* USER CODE END PFP */
 
@@ -127,9 +126,9 @@ static uint16_t SPWM_GetSineValue(uint16_t phase);
 /**
   * @brief  从正弦表获取正弦值
   * @param  phase: 相位值 (0-65535对应0-360度)
-  * @retval 正弦值 (Q15格式: 0-32767)
+  * @retval 正弦值 (32位)
   */
-static uint16_t SPWM_GetSineValue(uint16_t phase)
+static uint32_t SPWM_GetSineValue(uint16_t phase)
 {
   /* 取高8位作为正弦表索引 */
   uint8_t index = (phase >> (PHASE_BITS - SINE_TABLE_BITS)) & SINE_TABLE_MASK;
@@ -276,14 +275,14 @@ void SPWM_Update(void)
   }
 
   /* 获取当前相位对应的正弦值 (Q15格式) */
-  uint16_t sineValue = SPWM_GetSineValue(g_spwm.phaseAccumulator);
+  uint32_t sineValue = SPWM_GetSineValue(g_spwm.phaseAccumulator);
 
   /* 计算调制后的占空比
    * CCR = 半周期 + (半周期 * 调制比 * 正弦值) / (100 * 32768)
    * 简化: CCR = 4200 + (4200 * modulation * sineValue) / 3276800
    */
   int32_t modulation = (int32_t)g_spwm.modulationIndex;
-  int32_t temp = (TIM8_PWM_HALF_PERIOD * modulation * sineValue) / 3276800L;
+  int32_t temp = (int32_t)((float)TIM8_PWM_HALF_PERIOD * modulation * sineValue / 3276800.0f);
 
   /* CH1: 正弦波 */
   g_spwm.ccr1 = (uint16_t)(TIM8_PWM_HALF_PERIOD + temp);
@@ -320,6 +319,7 @@ void SPWM_Update(void)
   * @retval None
   * @note   在stm32f4xx_it.c中调用
   */
+#if 0 /* HAL_TIM_PeriodElapsedCallback已合并到main.c中 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim == &htim8)
@@ -327,5 +327,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     SPWM_Update();
   }
 }
+#endif
 
 /* USER CODE END 1 */

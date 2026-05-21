@@ -27,6 +27,7 @@
 #include "usart.h"
 #include "gpio.h"
 #include "fsmc.h"
+#include "spwm.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -195,6 +196,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == TIM6)
   {
     HAL_IncTick();
+  }
+  else if (htim == &htim8)
+  {
+    SPWM_Update();
   }
   /* USER CODE BEGIN Callback 1 */
 

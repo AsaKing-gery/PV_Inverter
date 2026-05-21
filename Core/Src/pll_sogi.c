@@ -300,11 +300,11 @@ void PLL_Update(float gridVoltage)
   /* phase_error = alpha * cos(theta) + beta * sin(theta) */
   g_pll.phaseError = -(g_pll.sogi.alpha * g_pll.cosTheta + g_pll.sogi.beta * g_pll.sinTheta);
 
-  /* PI控制器调节频率 */
-  g_pll.omega = PI_Update(&g_pll.pi, g_pll.phaseError);
+  /* PI控制器调节频率 (额定频率前馈 + PI修正) */
+  float omega_nominal = 2.0f * PI * PLL_GRID_FREQ_NOMINAL;
+  g_pll.omega = omega_nominal + PI_Update(&g_pll.pi, g_pll.phaseError);
 
   /* 频率限幅 */
-  float omega_nominal = 2.0f * PI * PLL_GRID_FREQ_NOMINAL;
   float omega_max = 2.0f * PI * PLL_GRID_FREQ_MAX;
   float omega_min = 2.0f * PI * PLL_GRID_FREQ_MIN;
 

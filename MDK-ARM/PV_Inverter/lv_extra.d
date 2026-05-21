@@ -62,6 +62,7 @@ pv_inverter\lv_extra.o: ../Middlewares/Third_Party/lvgl/src/extra/../../src/core
 pv_inverter\lv_extra.o: ../Middlewares/Third_Party/lvgl/src/extra/../../src/core/lv_disp.h
 pv_inverter\lv_extra.o: ../Middlewares/Third_Party/lvgl/src/extra/../../src/core/lv_theme.h
 pv_inverter\lv_extra.o: ../Middlewares/Third_Party/lvgl/src/extra/../../src/core/lv_refr.h
+pv_inverter\lv_extra.o: ../Middlewares/Third_Party/lvgl/src/extra/../../src/font/lv_font_fmt_txt.h
 pv_inverter\lv_extra.o: ../Middlewares/Third_Party/lvgl/src/extra/../../src/widgets/lv_arc.h
 pv_inverter\lv_extra.o: ../Middlewares/Third_Party/lvgl/src/extra/../../src/widgets/lv_bar.h
 pv_inverter\lv_extra.o: ../Middlewares/Third_Party/lvgl/src/extra/../../src/widgets/lv_btn.h

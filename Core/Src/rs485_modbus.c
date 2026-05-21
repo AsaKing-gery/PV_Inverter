@@ -23,6 +23,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "rs485_modbus.h"
 #include "usart.h"
+#include "esp32_wifi.h"
 #include "data.h"
 #include "cmsis_os.h"
 #include <string.h>
@@ -473,13 +474,17 @@ void Modbus_UpdateRegisters(void)
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+  /* ESP32 WiFi UART5 接收处理 */
+  ESP32_UART_RxHandler(huart);
+
+  /* RS-485 Modbus UART3 接收处理 */
   if (huart == &huart3)
   {
     /* 更新接收时间戳 */
     lastRxTick = HAL_GetTick();
-    
+
     rxIndex++;
-    
+
     if (rxIndex < MODBUS_RX_BUFFER_SIZE)
     {
       HAL_UART_Receive_IT(&huart3, &rxBuffer[rxIndex], 1);

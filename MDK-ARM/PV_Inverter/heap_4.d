@@ -9,5 +9,5 @@ pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portabl
 pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
 pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
 pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
-pv_inverter\heap_4.o: ../Core/Inc/task.h
-pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
+pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+pv_inverter\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h

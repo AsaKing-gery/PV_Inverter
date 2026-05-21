@@ -366,9 +366,9 @@ static float NTC_ConvertToTemp(uint16_t adcRaw)
   * @brief  获取光伏输入电压
   * @retval 光伏电压 (V)
   */
-float ADC_GetPVVoltage(void)
+float ADC_GetPVVoltage(uint16_t raw)
 {
-  float voltage = ADC_GetChannelVoltage(ADC_IDX_PV_VOLTAGE);
+  float voltage = ((float)raw * ADC_VREF) / ADC_RESOLUTION;
   voltage = (voltage - g_adcCal[ADC_IDX_PV_VOLTAGE].offset) * g_adcCal[ADC_IDX_PV_VOLTAGE].gain;
   float result = voltage * g_adcCal[ADC_IDX_PV_VOLTAGE].ratio;
 
@@ -380,9 +380,9 @@ float ADC_GetPVVoltage(void)
   * @brief  获取直流母线电压
   * @retval 母线电压 (V)
   */
-float ADC_GetBusVoltage(void)
+float ADC_GetBusVoltage(uint16_t raw)
 {
-  float voltage = ADC_GetChannelVoltage(ADC_IDX_BUS_VOLTAGE);
+  float voltage = ((float)raw * ADC_VREF) / ADC_RESOLUTION;
   voltage = (voltage - g_adcCal[ADC_IDX_BUS_VOLTAGE].offset) * g_adcCal[ADC_IDX_BUS_VOLTAGE].gain;
   float result = voltage * g_adcCal[ADC_IDX_BUS_VOLTAGE].ratio;
 
@@ -394,9 +394,9 @@ float ADC_GetBusVoltage(void)
   * @brief  获取光伏输入电流
   * @retval 光伏电流 (A)
   */
-float ADC_GetPVCurrent(void)
+float ADC_GetPVCurrent(uint16_t raw)
 {
-  float voltage = ADC_GetChannelVoltage(ADC_IDX_PV_CURRENT);
+  float voltage = ((float)raw * ADC_VREF) / ADC_RESOLUTION;
   float current = ACS712_ConvertToCurrent(voltage);
 
   s_filteredValue[ADC_IDX_PV_CURRENT] = ADC_LowPassFilter(current, s_filteredValue[ADC_IDX_PV_CURRENT], ADC_FILTER_COEF);
@@ -407,9 +407,9 @@ float ADC_GetPVCurrent(void)
   * @brief  获取交流输出电流
   * @retval 交流电流 (A)
   */
-float ADC_GetACCurrent(void)
+float ADC_GetACCurrent(uint16_t raw)
 {
-  float voltage = ADC_GetChannelVoltage(ADC_IDX_AC_CURRENT);
+  float voltage = ((float)raw * ADC_VREF) / ADC_RESOLUTION;
   float current = ACS712_ConvertToCurrent(voltage);
 
   s_filteredValue[ADC_IDX_AC_CURRENT] = ADC_LowPassFilter(current, s_filteredValue[ADC_IDX_AC_CURRENT], ADC_FILTER_COEF);
@@ -420,9 +420,8 @@ float ADC_GetACCurrent(void)
   * @brief  获取前级MOSFET温度
   * @retval 温度值 (℃)
   */
-float ADC_GetFrontTemperature(void)
+float ADC_GetFrontTemperature(uint16_t raw)
 {
-  uint16_t raw = ADC_GetRawValue(ADC_IDX_TEMP_FRONT);
   float temp = NTC_ConvertToTemp(raw);
 
   s_filteredValue[ADC_IDX_TEMP_FRONT] = ADC_LowPassFilter(temp, s_filteredValue[ADC_IDX_TEMP_FRONT], ADC_FILTER_COEF);
@@ -433,9 +432,8 @@ float ADC_GetFrontTemperature(void)
   * @brief  获取后级MOSFET温度
   * @retval 温度值 (℃)
   */
-float ADC_GetRearTemperature(void)
+float ADC_GetRearTemperature(uint16_t raw)
 {
-  uint16_t raw = ADC_GetRawValue(ADC_IDX_TEMP_REAR);
   float temp = NTC_ConvertToTemp(raw);
 
   s_filteredValue[ADC_IDX_TEMP_REAR] = ADC_LowPassFilter(temp, s_filteredValue[ADC_IDX_TEMP_REAR], ADC_FILTER_COEF);
@@ -447,10 +445,10 @@ float ADC_GetRearTemperature(void)
   * @retval 交流电压有效值 (V)
   * @note   使用4个周期的采样数据计算RMS
   */
-float ADC_GetACVoltage_RMS(void)
+float ADC_GetACVoltage_RMS(uint16_t raw)
 {
   /* 获取当前交流电压采样值 */
-  float voltage = ADC_GetChannelVoltage(ADC_IDX_AC_VOLTAGE);
+  float voltage = ((float)raw * ADC_VREF) / ADC_RESOLUTION;
 
   /* 减去偏置 */
   float acVoltage = voltage - ZMPT101B_VREF;
@@ -480,19 +478,25 @@ float ADC_GetACVoltage_RMS(void)
   */
 void ADC_UpdateVoltageCurrent(void)
 {
+  uint16_t rawPV_V  = ADC_GetRawValue(ADC_IDX_PV_VOLTAGE);
+  uint16_t rawPV_I  = ADC_GetRawValue(ADC_IDX_PV_CURRENT);
+  uint16_t rawBUS_V = ADC_GetRawValue(ADC_IDX_BUS_VOLTAGE);
+  uint16_t rawAC_I  = ADC_GetRawValue(ADC_IDX_AC_CURRENT);
+  uint16_t rawAC_V  = ADC_GetRawValue(ADC_IDX_AC_VOLTAGE);
+
   /* PV输入 */
-  g_mqttData.pv.voltage = ADC_GetPVVoltage();
-  g_mqttData.pv.current = ADC_GetPVCurrent();
+  g_mqttData.pv.voltage = ADC_GetPVVoltage(rawPV_V);
+  g_mqttData.pv.current = ADC_GetPVCurrent(rawPV_I);
   g_mqttData.pv.power = g_mqttData.pv.voltage * g_mqttData.pv.current;
 
   /* 母线 */
-  g_mqttData.bus.voltage = ADC_GetBusVoltage();
+  g_mqttData.bus.voltage = ADC_GetBusVoltage(rawBUS_V);
 
   /* 交流输出 */
-  g_mqttData.ac.current = ADC_GetACCurrent();
-  g_mqttData.ac.voltage = ADC_GetACVoltage_RMS();
+  g_mqttData.ac.current = ADC_GetACCurrent(rawAC_I);
+  g_mqttData.ac.voltage = ADC_GetACVoltage_RMS(rawAC_V);
   g_mqttData.ac.power = g_mqttData.ac.voltage * g_mqttData.ac.current;
-  g_mqttData.ac.pf = 0.95f;  /* 默认功率因数 */
+  g_mqttData.ac.pf = 0.95f;
 }
 
 /**
@@ -501,8 +505,10 @@ void ADC_UpdateVoltageCurrent(void)
   */
 void ADC_UpdateTemperature(void)
 {
-  g_mqttData.temp.mosfet_front = ADC_GetFrontTemperature();
-  g_mqttData.temp.mosfet_rear = ADC_GetRearTemperature();
+  uint16_t rawTEMP_F = ADC_GetRawValue(ADC_IDX_TEMP_FRONT);
+  uint16_t rawTEMP_R = ADC_GetRawValue(ADC_IDX_TEMP_REAR);
+  g_mqttData.temp.mosfet_front = ADC_GetFrontTemperature(rawTEMP_F);
+  g_mqttData.temp.mosfet_rear = ADC_GetRearTemperature(rawTEMP_R);
 }
 
 /**

@@ -25,6 +25,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include "cmsis_os2.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -70,7 +71,7 @@ static RingBuffer_t rxRingBuffer;   /* 接收环形缓冲区 */
 static volatile uint8_t rxLineComplete = 0;  /* 行接收完成标志 */
 
 /* 行缓冲区 - 用于提取完整行 */
-static uint8_t lineBuffer[AT_RSP_BUFFER_SIZE];
+/* static uint8_t lineBuffer[AT_RSP_BUFFER_SIZE]; */ /* 未使用，暂时注释 */
 static volatile uint16_t lineIndex = 0;
 
 /* 旧缓冲区兼容 (逐步替换) */
@@ -761,7 +762,8 @@ bool ESP32_SendDataFrame(void)
   * @retval None
   * @note   将接收到的字节写入环形缓冲区
   */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+/* HAL_UART_RxCpltCallback 已合并到rs485_modbus.c中，此函数暴露给外部调用 */
+void ESP32_UART_RxHandler(UART_HandleTypeDef *huart)
 {
   if (huart == &huart5)
   {

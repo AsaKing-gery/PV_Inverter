@@ -46,7 +46,8 @@ pv_inverter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.
 pv_inverter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
 pv_inverter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
 pv_inverter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
-pv_inverter\main.o: ../Core/Inc/task.h
+pv_inverter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+pv_inverter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
 pv_inverter\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
 pv_inverter\main.o: ../Core/Inc/adc.h
 pv_inverter\main.o: ../Core/Inc/dma.h
@@ -56,3 +57,5 @@ pv_inverter\main.o: ../Core/Inc/tim.h
 pv_inverter\main.o: ../Core/Inc/usart.h
 pv_inverter\main.o: ../Core/Inc/gpio.h
 pv_inverter\main.o: ../Core/Inc/fsmc.h
+pv_inverter\main.o: ../Core/Inc/spwm.h
+pv_inverter\main.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdbool.h

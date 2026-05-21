@@ -42,6 +42,7 @@ extern "C" {
 
 /* Font */
 #include "src/font/lv_font.h"
+#include "src/font/lv_font_fmt_txt.h"
 #include "src/font/lv_symbol_def.h"
 
 /* Widgets */
