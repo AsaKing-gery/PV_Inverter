@@ -2,8 +2,9 @@
 /**
   ******************************************************************************
   * @file           : esp32_wifi.h
-  * @brief          : ESP32-C3 WiFi and MQTT communication driver
-  *                   Uses AT commands via UART
+  * @brief          : ESP32-C3 WiFi and MQTT communication driver (Simplified)
+  *                   ESP32 handles WiFi/MQTT connection and JSON packing
+  *                   STM32 only sends binary data frames
   ******************************************************************************
   * @attention
   *
@@ -40,41 +41,15 @@ extern "C" {
 /* 启动等待时间 */
 #define ESP32_BOOT_DELAY_MS         3000    /* 等待ESP32启动 3秒 */
 
-/* AT命令超时 */
-#define AT_CMD_TIMEOUT_MS           5000
-#define AT_CMD_RETRY_COUNT          3
-
-/* WiFi配置 */
-#define WIFI_SSID                   "YourWiFiSSID"
-#define WIFI_PASSWORD               "YourWiFiPassword"
-
-/* MQTT配置 */
-#define MQTT_BROKER_IP              "192.168.1.100"
-#define MQTT_BROKER_PORT            1883
-#define MQTT_CLIENT_ID              "PV_Inverter_001"
-#define MQTT_USERNAME               "inverter"
-#define MQTT_PASSWORD               "password"
-#define MQTT_KEEPALIVE              60
-
-/* 主题定义 */
-#define MQTT_TOPIC_STATUS           "pv/inverter/status"
-#define MQTT_TOPIC_DATA             "pv/inverter/data"
-#define MQTT_TOPIC_CONTROL          "pv/inverter/control"
-#define MQTT_TOPIC_WILL             "pv/inverter/will"
-
 /* 缓冲区大小 */
 #define AT_CMD_BUFFER_SIZE          256
 #define AT_RSP_BUFFER_SIZE          512
 #define MQTT_PAYLOAD_SIZE           1024
 
-/* 连接状态 */
+/* 连接状态 (简化版) */
 #define ESP32_STATE_INIT            0
-#define ESP32_STATE_READY           1
-#define ESP32_STATE_WIFI_CONNECTING 2
-#define ESP32_STATE_WIFI_CONNECTED  3
-#define ESP32_STATE_MQTT_CONNECTING 4
-#define ESP32_STATE_MQTT_CONNECTED  5
-#define ESP32_STATE_ERROR           6
+#define ESP32_STATE_CONNECTED       1
+#define ESP32_STATE_ERROR           2
 
 /* USER CODE END ED */
 
@@ -87,7 +62,7 @@ extern "C" {
 typedef struct
 {
   uint8_t state;               /* 当前状态 */
-  uint8_t wifiRssi;            /* WiFi信号强度 */
+  uint8_t wifiRssi;            /* WiFi信号强度 (由ESP32上报) */
   uint32_t lastHeartbeat;      /* 上次心跳时间 */
   uint32_t txCount;            /* 发送计数 */
   uint32_t rxCount;            /* 接收计数 */
@@ -107,71 +82,16 @@ extern ESP32_Status_t g_esp32Status;
 /* USER CODE BEGIN EFP */
 
 /**
-  * @brief  初始化ESP32模块
+  * @brief  初始化ESP32模块 (简化版)
   * @param  None
   * @retval true: 成功, false: 失败
-  * @note   执行完整初始化流程：
-  *         1. 等待ESP32启动
-  *         2. 发送AT测试
-  *         3. 连接WiFi
-  *         4. 配置MQTT
-  *         5. 连接MQTT Broker
+  * @note   只等待ESP32发送READY信号，不进行WiFi/MQTT配置
+  *         ESP32上电后自动连接WiFi和MQTT，完成后发送"READY\n"
   */
 bool ESP32_Init(void);
 
 /**
-  * @brief  发送AT命令并等待响应
-  * @param  cmd: AT命令字符串
-  * @param  expectedRsp: 期望的响应字符串
-  * @param  timeoutMs: 超时时间(ms)
-  * @retval true: 成功, false: 失败
-  */
-bool ESP32_SendATCommand(const char* cmd, const char* expectedRsp, uint32_t timeoutMs);
-
-/**
-  * @brief  连接WiFi热点
-  * @param  ssid: WiFi名称
-  * @param  password: WiFi密码
-  * @retval true: 成功, false: 失败
-  */
-bool ESP32_ConnectWiFi(const char* ssid, const char* password);
-
-/**
-  * @brief  配置MQTT客户端
-  * @param  clientId: 客户端ID
-  * @param  username: 用户名
-  * @param  password: 密码
-  * @retval true: 成功, false: 失败
-  */
-bool ESP32_ConfigMQTT(const char* clientId, const char* username, const char* password);
-
-/**
-  * @brief  连接MQTT Broker
-  * @param  brokerIp: Broker IP地址
-  * @param  port: 端口号
-  * @retval true: 成功, false: 失败
-  */
-bool ESP32_ConnectMQTT(const char* brokerIp, uint16_t port);
-
-/**
-  * @brief  发布MQTT消息
-  * @param  topic: 主题
-  * @param  payload: 消息内容
-  * @param  qos: QoS等级 (0/1/2)
-  * @retval true: 成功, false: 失败
-  */
-bool ESP32_MQTTPublish(const char* topic, const char* payload, uint8_t qos);
-
-/**
-  * @brief  订阅MQTT主题
-  * @param  topic: 主题
-  * @param  qos: QoS等级 (0/1/2)
-  * @retval true: 成功, false: 失败
-  */
-bool ESP32_MQTTSubscribe(const char* topic, uint8_t qos);
-
-/**
-  * @brief  检查ESP32状态
+  * @brief  获取ESP32状态
   * @param  None
   * @retval 状态值
   */
@@ -185,25 +105,19 @@ uint8_t ESP32_GetState(void);
 const char* ESP32_GetStateString(void);
 
 /**
-  * @brief  检查WiFi是否连接
+  * @brief  检查ESP32是否已连接
   * @param  None
   * @retval true: 已连接, false: 未连接
   */
-bool ESP32_IsWiFiConnected(void);
+bool ESP32_IsConnected(void);
 
 /**
-  * @brief  检查MQTT是否连接
-  * @param  None
-  * @retval true: 已连接, false: 未连接
-  */
-bool ESP32_IsMQTTConnected(void);
-
-/**
-  * @brief  发送心跳保活
+  * @brief  复位ESP32模块
   * @param  None
   * @retval true: 成功, false: 失败
+  * @note   发送复位命令后等待READY信号
   */
-bool ESP32_SendHeartbeat(void);
+bool ESP32_Reset(void);
 
 /**
   * @brief  ESP32 UART接收中断处理
@@ -212,21 +126,6 @@ bool ESP32_SendHeartbeat(void);
   * @note   由HAL_UART_RxCpltCallback调用
   */
 void ESP32_UART_RxHandler(UART_HandleTypeDef *huart);
-
-/**
-  * @brief  处理接收到的数据
-  * @param  None
-  * @retval None
-  * @note   在UART接收中断中调用
-  */
-void ESP32_ProcessRxData(void);
-
-/**
-  * @brief  复位ESP32模块
-  * @param  None
-  * @retval None
-  */
-void ESP32_Reset(void);
 
 /**
   * @brief  发送数据帧到ESP32 (二进制格式)
@@ -242,8 +141,32 @@ bool ESP32_SendDataFrame(void);
   * @param  data: 数据指针
   * @param  len: 数据长度
   * @retval true: 成功, false: 失败
+  * @note   数据格式: [0xAA][0x55][LEN(2B)][DATA][CRC8]
   */
 bool ESP32_SendBinary(const uint8_t* data, uint16_t len);
+
+/**
+  * @brief  检查ESP32 MQTT是否已连接
+  * @param  None
+  * @retval true: 已连接, false: 未连接
+  */
+bool ESP32_IsMQTTConnected(void);
+
+/**
+  * @brief  发送心跳包到ESP32
+  * @param  None
+  * @retval true: 成功, false: 失败
+  */
+bool ESP32_SendHeartbeat(void);
+
+/**
+  * @brief  发送故障事件到ESP32 (由ESP32转发到MQTT event主题)
+  * @param  faultCode: 故障代码 (与protection.h中定义一致)
+  * @param  faultData: 附加数据 (如故障时的电压/电流值)
+  * @retval true: 成功, false: 失败
+  * @note   事件格式: [0xAA][0x55][0x01][0x00][EVENT_TYPE_FAULT][faultCode][faultData(4B)][CRC8]
+  */
+bool ESP32_SendEvent(uint8_t faultCode, uint32_t faultData);
 
 /* USER CODE END EFP */
 

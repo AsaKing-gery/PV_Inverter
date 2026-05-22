@@ -23,6 +23,7 @@
 #include "spwm.h"
 #include "tim.h"
 #include "data.h"
+#include "esp32_wifi.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -379,12 +380,18 @@ uint8_t Protection_Check(float pvVoltage, float acCurrent, float tempFront, floa
 void Protection_ExecuteAction(void)
 {
   uint8_t action = PROT_ACTION_NONE;
-
-  /* 确定动作 */
+  static uint8_t lastFaultCode = PROT_FAULT_NONE;
+  
+  /* 确定动作和故障码 */
+  uint8_t currentFault = PROT_FAULT_NONE;
+  uint32_t faultData = 0;
+  
   if (g_protection.pvUV.isLatched)
   {
     /* 光伏欠压 → 关闭TIM1 (MPPT) */
     action = PROT_ACTION_STOP_TIM1;
+    currentFault = PROT_FAULT_PV_UV;
+    faultData = (uint32_t)(g_mqttData.pv.voltage * 1000); /* 电压值放大1000倍 */
   }
 
   if (g_protection.outOC.isLatched)
@@ -398,6 +405,8 @@ void Protection_ExecuteAction(void)
     {
       action = PROT_ACTION_STOP_TIM8;
     }
+    currentFault = PROT_FAULT_OC;
+    faultData = (uint32_t)(g_mqttData.ac.current * 1000); /* 电流值放大1000倍 */
   }
 
   if (g_protection.tempFront.isLatched || g_protection.tempRear.isLatched)
@@ -407,7 +416,29 @@ void Protection_ExecuteAction(void)
     {
       action = PROT_ACTION_DERATE;
     }
+    if (g_protection.tempFront.isLatched && g_protection.tempRear.isLatched)
+    {
+      currentFault = PROT_FAULT_OT_BOTH;
+      faultData = (uint32_t)(g_mqttData.temp.mosfet_front * 10); /* 温度值放大10倍 */
+    }
+    else if (g_protection.tempFront.isLatched)
+    {
+      currentFault = PROT_FAULT_OT_FRONT;
+      faultData = (uint32_t)(g_mqttData.temp.mosfet_front * 10);
+    }
+    else
+    {
+      currentFault = PROT_FAULT_OT_REAR;
+      faultData = (uint32_t)(g_mqttData.temp.mosfet_rear * 10);
+    }
   }
+
+  /* 故障发生变化时发送事件 */
+  if (currentFault != lastFaultCode && currentFault != PROT_FAULT_NONE)
+  {
+    ESP32_SendEvent(currentFault, faultData);
+  }
+  lastFaultCode = currentFault;
 
   g_protection.action = action;
 

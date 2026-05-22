@@ -44,5 +44,4 @@ pv_inverter\esp32_wifi.o: ../Core/Inc/main.h
 pv_inverter\esp32_wifi.o: ../Core/Inc/data.h
 pv_inverter\esp32_wifi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\string.h
 pv_inverter\esp32_wifi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdio.h
-pv_inverter\esp32_wifi.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdarg.h
 pv_inverter\esp32_wifi.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h

@@ -36,6 +36,8 @@
 #include "data.h"
 #include "display.h"
 #include "display_ui.h"
+#include "led.h"
+#include "thd_calculator.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -270,16 +272,22 @@ static void Init_AllModules(void)
   SPWM_Init();               /* SPWM生成 */
   PLL_Init();                /* 锁相环 */
   
-  /* 4. 保护系统初始化 */
+  /* 4. THD计算初始化 */
+  THD_Init();                /* 谐波失真计算 */
+  
+  /* 5. 保护系统初始化 */
   Protection_Init();
   
-  /* 5. 通信模块初始化 */
+  /* 6. 通信模块初始化 */
   /* ESP32在WiFiTask中异步初始化，避免长时间阻塞 */
   Modbus_Init();             /* RS485 Modbus */
   
-  /* 6. 显示系统初始化 */
+  /* 7. 显示系统初始化 */
   Display_Init();            /* LCD+LVGL */
   DisplayUI_Init();          /* UI界面 */
+	
+  /* 8. 系统运行指示 */
+  LED_Init();
 }
 
 /**
@@ -385,7 +393,15 @@ void ControlTask(void *argument)
     /* ========== 5. 锁相环SOGI-PLL ========== */
     PLL_Update(acVoltage);
     
-    /* ========== 6. 保护检测 ========== */
+    /* ========== 6. THD计算 (每10ms采样一次，640ms计算一次) ========== */
+    /* 添加交流电压采样到THD计算器 */
+    if (THD_AddSample(acVoltage))
+    {
+      /* 缓冲区已满，计算THD */
+      THD_Calculate();
+    }
+    
+    /* ========== 7. 保护检测 ========== */
     uint8_t faultCode = Protection_Check(pvVoltage, acCurrent, tempFront, tempRear);
     
     if (faultCode != 0)
@@ -394,10 +410,10 @@ void ControlTask(void *argument)
       Protection_ExecuteAction();
     }
     
-    /* ========== 7. 准备状态字符串 (互斥量外准备) ========== */
+    /* ========== 8. 准备状态字符串 (互斥量外准备) ========== */
     const char* invState = PLL_IsLocked() ? "RUN" : "STOP";
     
-    /* ========== 8. 更新全局数据 (缩短互斥量持有时间) ========== */
+    /* ========== 9. 更新全局数据 (缩短互斥量持有时间) ========== */
     osMutexAcquire(globalDataMutex, osWaitForever);
     {
       /* 使用结构体赋值减少代码量 */
@@ -418,6 +434,13 @@ void ControlTask(void *argument)
       g_mqttData.mppt.duty = MPPT_GetDuty();
       g_mqttData.mppt.efficiency = MPPT_GetEfficiency();
       
+      /* 更新THD值 */
+      g_mqttData.inverter.thd = THD_GetFilteredValue();
+      
+      /* 更新电网频率和相位 */
+      g_mqttData.inverter.gridFreq = PLL_GetFrequency();
+      g_mqttData.inverter.gridPhase = PLL_GetPhaseDegree();
+      
       /* 直接赋值4字节状态码，比strncpy更快 */
       *(uint32_t*)g_mqttData.inverter.state = *(uint32_t*)invState;
     }
@@ -428,7 +451,10 @@ void ControlTask(void *argument)
     
     /* 周期计数 */
     cycleCount++;
-    
+    if (cycleCount % 50 == 0)  // 50 × 10ms = 500ms
+  {
+      LED_Toggle1();
+  }
     /* 10ms周期 */
     osDelay(10);
   }

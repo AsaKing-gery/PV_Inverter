@@ -60,6 +60,8 @@
 "pv_inverter\display.o"
 "pv_inverter\display_ui.o"
 "pv_inverter\data.o"
+"pv_inverter\led.o"
+"pv_inverter\thd_calculator.o"
 "pv_inverter\lv_disp.o"
 "pv_inverter\lv_event.o"
 "pv_inverter\lv_group.o"

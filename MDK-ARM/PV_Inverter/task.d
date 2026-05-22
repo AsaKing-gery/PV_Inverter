@@ -186,4 +186,6 @@ pv_inverter\task.o: ../Middlewares/Third_Party/lvgl/src/extra/widgets/imgbtn/lv_
 pv_inverter\task.o: ../Middlewares/Third_Party/lvgl/src/extra/widgets/span/lv_span.h
 pv_inverter\task.o: ../Middlewares/Third_Party/lvgl/src/lv_api_map.h
 pv_inverter\task.o: ../Core/Inc/display_ui.h
+pv_inverter\task.o: ../Core/Inc/led.h
+pv_inverter\task.o: ../Core/Inc/thd_calculator.h
 pv_inverter\task.o: D:\SOFT\Keil5\ARM\ARMCC\Bin\..\include\stdio.h
