@@ -61,6 +61,9 @@ extern "C" {
 #define ADC_FILTER_COEF             0.2f        /* 一阶低通滤波系数 (0-1) */
 #define ADC_NOISE_THRESHOLD         0.02f       /* 电流噪声阈值 (A), 约20mA */
 
+/* ACS712滑动窗口滤波参数 */
+#define ACS712_WINDOW_SIZE          8           /* 滑动窗口大小 (2的幂次，便于计算) */
+
 /* 温度限值 */
 #define TEMP_MIN_VALID              -40.0f      /* 最低有效温度 (℃) */
 #define TEMP_MAX_VALID              125.0f      /* 最高有效温度 (℃) */
@@ -273,6 +276,15 @@ void ADC_ZeroCalibration(ADC_Index_t index);
   * @retval 滤波后的值
   */
 float ADC_LowPassFilter(float newValue, float oldValue, float coef);
+
+/**
+  * @brief  ACS712滑动窗口滤波器
+  * @param  index: 电流通道索引 (ADC_IDX_PV_CURRENT 或 ADC_IDX_AC_CURRENT)
+  * @param  newValue: 新采样值
+  * @retval 滤波后的值
+  * @note   滑动窗口取平均，对WiFi瞬态干扰等脉冲噪声抑制效果优于低通滤波
+  */
+float ACS712_SlidingWindowFilter(ADC_Index_t index, float newValue);
 
 /*================== 批量更新函数 ==================*/
 

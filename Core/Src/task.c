@@ -502,7 +502,10 @@ void WiFiTask(void *argument)
       strncpy(g_mqttStatus.state, "ONLINE", sizeof(g_mqttStatus.state));
       g_mqttStatus.uptime = (osKernelGetTickCount() - taskStartTick) / 1000;  /* 秒 */
 
-      /* 等待ADC数据就绪信号量 (由ControlTask释放) */
+      /* 等待ADC数据就绪信号量 (由ADC DMA中断释放)
+       * 确保ADC采样完成后再发送数据，避免WiFi发射瞬态电流
+       * 导致3.3V电源轨跌落影响ADC采样精度
+       */
       if (osSemaphoreAcquire(adcDoneSem, 1000) == osOK)
       {
         /* 发送二进制数据帧到ESP32
@@ -516,6 +519,11 @@ void WiFiTask(void *argument)
 
           /* 更新发送计数 */
           g_esp32Status.txCount = dataSendCount;
+
+          /* WiFi发射瞬态电流约200-300mA，等待5ms让电源恢复稳定
+           * 避免后续ADC采样受电源跌落影响
+           */
+          osDelay(5);
 
           /* 每10次数据发送一次心跳保活 */
           if (heartbeatCount >= 10)

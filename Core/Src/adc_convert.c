@@ -75,6 +75,11 @@ ADC_Calibration_t g_adcCal[ADC_IDX_COUNT];
 /* 滤波值缓存 */
 static float s_filteredValue[ADC_IDX_COUNT] = {0};
 
+/* ACS712滑动窗口缓冲区 */
+static float s_acs712Window[ADC_IDX_COUNT][ACS712_WINDOW_SIZE];
+static uint8_t s_acs712WindowIdx[ADC_IDX_COUNT] = {0};
+static uint8_t s_acs712WindowFilled[ADC_IDX_COUNT] = {0};
+
 /* ZMPT101B交流电压采样缓冲区 (用于RMS计算) */
 static float s_acVoltageBuffer[ZMPT101B_SAMPLE_CYCLES];
 static uint8_t s_acVoltageIndex = 0;
@@ -303,6 +308,41 @@ float ADC_LowPassFilter(float newValue, float oldValue, float coef)
 }
 
 /**
+  * @brief  ACS712滑动窗口滤波器
+  * @param  index: 电流通道索引 (ADC_IDX_PV_CURRENT 或 ADC_IDX_AC_CURRENT)
+  * @param  newValue: 新采样值
+  * @retval 滤波后的值
+  * @note   滑动窗口取平均，对WiFi瞬态干扰等脉冲噪声抑制效果优于低通滤波
+  *         窗口大小 ACS712_WINDOW_SIZE=8，约80ms延迟 (10ms×8)
+  */
+float ACS712_SlidingWindowFilter(ADC_Index_t index, float newValue)
+{
+  if (index >= ADC_IDX_COUNT)
+  {
+    return newValue;
+  }
+
+  /* 用新值替换最旧的值 (环形缓冲) */
+  s_acs712Window[index][s_acs712WindowIdx[index]] = newValue;
+  s_acs712WindowIdx[index] = (s_acs712WindowIdx[index] + 1) % ACS712_WINDOW_SIZE;
+
+  /* 窗口未填满时标记 */
+  if (s_acs712WindowFilled[index] < ACS712_WINDOW_SIZE)
+  {
+    s_acs712WindowFilled[index]++;
+  }
+
+  /* 计算窗口平均值 */
+  float sum = 0.0f;
+  for (uint8_t i = 0; i < s_acs712WindowFilled[index]; i++)
+  {
+    sum += s_acs712Window[index][i];
+  }
+
+  return sum / (float)s_acs712WindowFilled[index];
+}
+
+/**
   * @brief  ACS712电压转电流 (内部函数)
   * @param  voltage: ACS712输出电压 (V)
   * @retval 电流值 (A)
@@ -399,7 +439,7 @@ float ADC_GetPVCurrent(uint16_t raw)
   float voltage = ((float)raw * ADC_VREF) / ADC_RESOLUTION;
   float current = ACS712_ConvertToCurrent(voltage);
 
-  s_filteredValue[ADC_IDX_PV_CURRENT] = ADC_LowPassFilter(current, s_filteredValue[ADC_IDX_PV_CURRENT], ADC_FILTER_COEF);
+  s_filteredValue[ADC_IDX_PV_CURRENT] = ACS712_SlidingWindowFilter(ADC_IDX_PV_CURRENT, current);
   return s_filteredValue[ADC_IDX_PV_CURRENT];
 }
 
@@ -412,7 +452,7 @@ float ADC_GetACCurrent(uint16_t raw)
   float voltage = ((float)raw * ADC_VREF) / ADC_RESOLUTION;
   float current = ACS712_ConvertToCurrent(voltage);
 
-  s_filteredValue[ADC_IDX_AC_CURRENT] = ADC_LowPassFilter(current, s_filteredValue[ADC_IDX_AC_CURRENT], ADC_FILTER_COEF);
+  s_filteredValue[ADC_IDX_AC_CURRENT] = ACS712_SlidingWindowFilter(ADC_IDX_AC_CURRENT, current);
   return s_filteredValue[ADC_IDX_AC_CURRENT];
 }
 
